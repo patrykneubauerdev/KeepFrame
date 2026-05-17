@@ -6,17 +6,28 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		84AB4F2C2FBA3CB400654C65 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84AB4F292FBA3CB400654C65 /* Assets.xcassets */; };
+		84AB4F2D2FBA3CB400654C65 /* PhotoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB4F1E2FBA3CB400654C65 /* PhotoItem.swift */; };
+		84AB4F2E2FBA3CB400654C65 /* PhotoDeckViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB4F222FBA3CB400654C65 /* PhotoDeckViewModel.swift */; };
+		84AB4F2F2FBA3CB400654C65 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB4F242FBA3CB400654C65 /* ActionButton.swift */; };
+		84AB4F302FBA3CB400654C65 /* KeepFrameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB4F252FBA3CB400654C65 /* KeepFrameView.swift */; };
+		84AB4F312FBA3CB400654C65 /* PolaroidCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB4F262FBA3CB400654C65 /* PolaroidCard.swift */; };
+		84AB4F322FBA3CB400654C65 /* SwipeableCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB4F272FBA3CB400654C65 /* SwipeableCardView.swift */; };
+		84AB4F332FBA3CB400654C65 /* KeepFrameApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB4F2A2FBA3CB400654C65 /* KeepFrameApp.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		84AB4EE72FB4D6AB00654C65 /* KeepFrame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KeepFrame.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		84AB4F1E2FBA3CB400654C65 /* PhotoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoItem.swift; sourceTree = "<group>"; };
+		84AB4F222FBA3CB400654C65 /* PhotoDeckViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDeckViewModel.swift; sourceTree = "<group>"; };
+		84AB4F242FBA3CB400654C65 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
+		84AB4F252FBA3CB400654C65 /* KeepFrameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepFrameView.swift; sourceTree = "<group>"; };
+		84AB4F262FBA3CB400654C65 /* PolaroidCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolaroidCard.swift; sourceTree = "<group>"; };
+		84AB4F272FBA3CB400654C65 /* SwipeableCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableCardView.swift; sourceTree = "<group>"; };
+		84AB4F292FBA3CB400654C65 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		84AB4F2A2FBA3CB400654C65 /* KeepFrameApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepFrameApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		84AB4EE92FB4D6AB00654C65 /* KeepFrame */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = KeepFrame;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		84AB4EE42FB4D6AB00654C65 /* Frameworks */ = {
@@ -32,7 +43,7 @@
 		84AB4EDE2FB4D6AB00654C65 = {
 			isa = PBXGroup;
 			children = (
-				84AB4EE92FB4D6AB00654C65 /* KeepFrame */,
+				84AB4F2B2FBA3CB400654C65 /* KeepFrame */,
 				84AB4EE82FB4D6AB00654C65 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +54,85 @@
 				84AB4EE72FB4D6AB00654C65 /* KeepFrame.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		84AB4F1D2FBA3CB400654C65 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		84AB4F1F2FBA3CB400654C65 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				84AB4F1E2FBA3CB400654C65 /* PhotoItem.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		84AB4F202FBA3CB400654C65 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				84AB4F292FBA3CB400654C65 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		84AB4F212FBA3CB400654C65 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		84AB4F232FBA3CB400654C65 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				84AB4F222FBA3CB400654C65 /* PhotoDeckViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		84AB4F282FBA3CB400654C65 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				84AB4F342FBA3D1600654C65 /* Screens */,
+				84AB4F352FBA3D1E00654C65 /* Components */,
+				84AB4F252FBA3CB400654C65 /* KeepFrameView.swift */,
+				84AB4F272FBA3CB400654C65 /* SwipeableCardView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		84AB4F2B2FBA3CB400654C65 /* KeepFrame */ = {
+			isa = PBXGroup;
+			children = (
+				84AB4F1F2FBA3CB400654C65 /* Models */,
+				84AB4F232FBA3CB400654C65 /* ViewModels */,
+				84AB4F282FBA3CB400654C65 /* Views */,
+				84AB4F1D2FBA3CB400654C65 /* Extensions */,
+				84AB4F212FBA3CB400654C65 /* Services */,
+				84AB4F202FBA3CB400654C65 /* Resources */,
+				84AB4F2A2FBA3CB400654C65 /* KeepFrameApp.swift */,
+			);
+			path = KeepFrame;
+			sourceTree = "<group>";
+		};
+		84AB4F342FBA3D1600654C65 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		84AB4F352FBA3D1E00654C65 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				84AB4F262FBA3CB400654C65 /* PolaroidCard.swift */,
+				84AB4F242FBA3CB400654C65 /* ActionButton.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -59,9 +149,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				84AB4EE92FB4D6AB00654C65 /* KeepFrame */,
 			);
 			name = KeepFrame;
 			packageProductDependencies = (
@@ -109,6 +196,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84AB4F2C2FBA3CB400654C65 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +207,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84AB4F2D2FBA3CB400654C65 /* PhotoItem.swift in Sources */,
+				84AB4F2E2FBA3CB400654C65 /* PhotoDeckViewModel.swift in Sources */,
+				84AB4F2F2FBA3CB400654C65 /* ActionButton.swift in Sources */,
+				84AB4F302FBA3CB400654C65 /* KeepFrameView.swift in Sources */,
+				84AB4F312FBA3CB400654C65 /* PolaroidCard.swift in Sources */,
+				84AB4F322FBA3CB400654C65 /* SwipeableCardView.swift in Sources */,
+				84AB4F332FBA3CB400654C65 /* KeepFrameApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,8 +354,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -291,8 +386,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

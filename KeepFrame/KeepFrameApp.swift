@@ -11,7 +11,7 @@ import SwiftUI
 struct KeepFrameApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            KeepFrameView()
         }
     }
 }
