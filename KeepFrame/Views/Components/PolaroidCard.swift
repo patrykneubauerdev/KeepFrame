@@ -12,7 +12,7 @@ struct PolaroidCard: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Image(systemName: "photo.fill")
+            Image(systemName: "photo")
                 .resizable()
                 .scaledToFill()
                 .frame(width: 280, height: 340)
