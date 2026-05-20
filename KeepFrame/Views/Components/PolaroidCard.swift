@@ -8,22 +8,30 @@
 import SwiftUI
 
 struct PolaroidCard: View {
-    let photo: PhotoItem
+    let image: UIImage?
 
     var body: some View {
         VStack(spacing: 0) {
-            Image(systemName: "photo")
-                .resizable()
-                .scaledToFill()
-                .frame(width: 280, height: 340)
-                .clipped()
-                .padding(.top, 16)
-                .padding(.horizontal, 16)
+            Group {
+                if let image {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                } else {
+                    Rectangle()
+                        .fill(.gray.opacity(0.2))
+                        .overlay {
+                            ProgressView()
+                        }
+                }
+            }
+            .frame(width: 280, height: 340)
+            .clipped()
+            .padding(.top, 16)
+            .padding(.horizontal, 16)
 
-            Text(photo.date, style: .date)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .padding(.vertical, 20)
+            Spacer()
+                .frame(height: 40)
         }
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 4))

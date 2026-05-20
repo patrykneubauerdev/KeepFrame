@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SwipeableCardView: View {
     let photo: PhotoItem
+    let nextPhoto: PhotoItem?
     let onSwipe: (SwipeAction) -> Void
 
     @State private var offset: CGSize = .zero
@@ -16,32 +17,49 @@ struct SwipeableCardView: View {
 
     private let swipeThreshold: CGFloat = 120
 
-    var body: some View {
-        PolaroidCard(photo: photo)
-            .offset(offset)
-            .rotationEffect(.degrees(rotation))
-            .gesture(
-                DragGesture()
-                    .onChanged { value in
-                        offset = value.translation
-                        rotation = Double(value.translation.width / 20)
-                    }
-                    .onEnded { value in
-                        let w = value.translation.width
-                        let h = value.translation.height
+    private var dragProgress: CGFloat {
+        let maxDrag: CGFloat = 200
+        let total = abs(offset.width) + abs(offset.height)
+        return min(total / maxDrag, 1.0)
+    }
 
-                        if w < -swipeThreshold {
-                            dismiss(to: .leading) { onSwipe(.delete) }
-                        } else if w > swipeThreshold {
-                            dismiss(to: .trailing) { onSwipe(.keep) }
-                        } else if h < -swipeThreshold {
-                            dismiss(to: .top) { onSwipe(.skip) }
-                        } else {
-                            reset()
+    var body: some View {
+        ZStack {
+            // Next card (behind)
+            if let nextPhoto {
+                PolaroidCard(image: nextPhoto.thumbnail)
+                    .scaleEffect(0.92 + 0.08 * dragProgress)
+                    .offset(y: 12 - 12 * dragProgress)
+                    .opacity(0.7 + 0.3 * dragProgress)
+            }
+
+            // Current card (front)
+            PolaroidCard(image: photo.thumbnail)
+                .offset(offset)
+                .rotationEffect(.degrees(rotation))
+                .gesture(
+                    DragGesture()
+                        .onChanged { value in
+                            offset = value.translation
+                            rotation = Double(value.translation.width / 20)
                         }
-                    }
-            )
-            .overlay(alignment: .top) { swipeLabel }
+                        .onEnded { value in
+                            let w = value.translation.width
+                            let h = value.translation.height
+
+                            if w < -swipeThreshold {
+                                dismiss(to: .leading) { onSwipe(.delete) }
+                            } else if w > swipeThreshold {
+                                dismiss(to: .trailing) { onSwipe(.keep) }
+                            } else if h < -swipeThreshold {
+                                dismiss(to: .top) { onSwipe(.favorite) }
+                            } else {
+                                reset()
+                            }
+                        }
+                )
+                .overlay(alignment: .top) { swipeLabel }
+        }
     }
 
     @ViewBuilder
@@ -59,7 +77,7 @@ struct SwipeableCardView: View {
                 .padding(8)
                 .offset(y: -40)
         } else if offset.height < -50 {
-            Text("POMIŃ")
+            Text("ULUBIONE")
                 .font(.title.bold())
                 .foregroundStyle(.yellow)
                 .padding(8)
@@ -75,12 +93,8 @@ struct SwipeableCardView: View {
         case .top: target = CGSize(width: 0, height: -600)
         default: target = .zero
         }
-        withAnimation(.easeOut(duration: 0.3)) {
-            offset = target
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            completion()
-        }
+        withAnimation(.easeOut(duration: 0.3)) { offset = target }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { completion() }
     }
 
     private func reset() {

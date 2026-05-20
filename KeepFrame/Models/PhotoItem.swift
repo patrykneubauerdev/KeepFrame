@@ -5,22 +5,29 @@
 //  Created by Patryk Neubauer on 13/05/2026.
 //
 
-import Foundation
+import Photos
+import UIKit
 
-struct PhotoItem: Identifiable {
-    let id: UUID
-    let imageName: String
-    let date: Date
+struct PhotoItem: Identifiable, Hashable {
+    let id: String
+    let asset: PHAsset
+    var thumbnail: UIImage?
 
-    init(id: UUID = UUID(), imageName: String, date: Date = .now) {
-        self.id = id
-        self.imageName = imageName
-        self.date = date
+    init(asset: PHAsset) {
+        self.id = asset.localIdentifier
+        self.asset = asset
     }
+
+    static func == (lhs: PhotoItem, rhs: PhotoItem) -> Bool { lhs.id == rhs.id }
+    func hash(into hasher: inout Hasher) { hasher.combine(id) }
 }
 
 enum SwipeAction {
-    case delete
-    case skip
-    case keep
+    case delete, favorite, keep
+}
+
+enum PhotoSortOrder: String, CaseIterable {
+    case newest = "Najnowsze"
+    case oldest = "Najstarsze"
+    case random = "Losowe"
 }
