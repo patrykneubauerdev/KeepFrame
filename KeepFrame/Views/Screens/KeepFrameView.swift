@@ -14,17 +14,19 @@ struct KeepFrameView: View {
     @State private var showHistory = false
     @State private var showTrash = false
     @State private var showEndSessionAlert = false
+    @State private var isFirstReveal = true
 
     var body: some View {
         Group {
-            if viewModel.isLoading {
-                ProgressView("Ładowanie zdjęć...")
-            } else if viewModel.authorizationDenied {
+            if viewModel.authorizationDenied {
                 deniedView
             } else if let photo = viewModel.currentPhoto {
                 deckView(photo: photo)
-            } else {
+            } else if viewModel.hasActiveSession && !viewModel.isLoading {
                 sessionCompleteView
+            } else {
+                Color.clear
+                    .frame(height: 420)
             }
         }
         .navigationTitle("KeepFrame")
@@ -98,8 +100,9 @@ struct KeepFrameView: View {
         VStack(spacing: 32) {
             Spacer()
 
-            SwipeableCardView(photo: photo, nextPhoto: viewModel.nextPhoto) { action in
+            SwipeableCardView(photo: photo, nextPhoto: viewModel.nextPhoto, isFirstCard: isFirstReveal) { action in
                 viewModel.perform(action)
+                isFirstReveal = false
             }
             .id(photo.id)
             .frame(height: 420)

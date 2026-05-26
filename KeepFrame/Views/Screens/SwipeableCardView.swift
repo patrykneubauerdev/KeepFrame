@@ -10,10 +10,19 @@ import SwiftUI
 struct SwipeableCardView: View {
     let photo: PhotoItem
     let nextPhoto: PhotoItem?
+    var isFirstCard: Bool = false
     let onSwipe: (SwipeAction) -> Void
 
     @State private var offset: CGSize = .zero
     @State private var rotation: Double = 0
+    @State private var slideOffset: CGFloat = 0
+    @State private var flipAngle: Double = 0
+    @State private var isReady = false
+    @State private var didAppear = false
+    @State private var showNextCard = false
+    @State private var showFront = false
+    @State private var showImage = false
+    @State private var animationStarted = false
 
     private let swipeThreshold: CGFloat = 120
 
@@ -23,42 +32,117 @@ struct SwipeableCardView: View {
         return min(total / maxDrag, 1.0)
     }
 
+
     var body: some View {
         ZStack {
             // Next card (behind)
-            if let nextPhoto {
-                PolaroidCard(image: nextPhoto.thumbnail)
-                    .scaleEffect(0.92 + 0.08 * dragProgress)
-                    .offset(y: 12 - 12 * dragProgress)
-                    .opacity(0.7 + 0.3 * dragProgress)
+            if showNextCard, let nextPhoto {
+                if nextPhoto.thumbnail != nil {
+                    PolaroidCard(image: nextPhoto.thumbnail)
+                        .scaleEffect(0.92 + 0.08 * dragProgress)
+                        .offset(y: 12 - 12 * dragProgress)
+                        .opacity(0.7 + 0.3 * dragProgress)
+                } else {
+                    CardBack()
+                        .scaleEffect(0.92 + 0.08 * dragProgress)
+                        .offset(y: 12 - 12 * dragProgress)
+                        .opacity(0.7 + 0.3 * dragProgress)
+                }
             }
 
-            // Current card (front)
-            PolaroidCard(image: photo.thumbnail)
-                .offset(offset)
-                .rotationEffect(.degrees(rotation))
-                .gesture(
-                    DragGesture()
-                        .onChanged { value in
-                            offset = value.translation
-                            rotation = Double(value.translation.width / 20)
-                        }
-                        .onEnded { value in
-                            let w = value.translation.width
-                            let h = value.translation.height
+            // Current card with slide + flip
+            ZStack {
+                // Phase 1: Card back (visible until 90°)
+                CardBack()
+                    .opacity(showFront ? 0 : 1)
 
-                            if w < -swipeThreshold {
-                                dismiss(to: .leading) { onSwipe(.delete) }
-                            } else if w > swipeThreshold {
-                                dismiss(to: .trailing) { onSwipe(.keep) }
-                            } else if h < -swipeThreshold {
-                                dismiss(to: .top) { onSwipe(.favorite) }
-                            } else {
-                                reset()
-                            }
+                // Phase 2: Empty frame appears at 90°, then image fades in
+                PolaroidCard(image: showImage ? photo.thumbnail : nil)
+                    .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+                    .opacity(showFront ? 1 : 0)
+            }
+            .rotation3DEffect(.degrees(flipAngle), axis: (x: 0, y: 1, z: 0), perspective: 0.5)
+            .offset(x: offset.width, y: offset.height + slideOffset)
+            .rotationEffect(.degrees(rotation))
+            .gesture(
+                DragGesture()
+                    .onChanged { value in
+                        guard isReady else { return }
+                        offset = value.translation
+                        rotation = Double(value.translation.width / 20)
+                    }
+                    .onEnded { value in
+                        guard isReady else { return }
+                        let w = value.translation.width
+                        let h = value.translation.height
+
+                        if w < -swipeThreshold {
+                            dismiss(to: .leading) { onSwipe(.delete) }
+                        } else if w > swipeThreshold {
+                            dismiss(to: .trailing) { onSwipe(.keep) }
+                        } else if h < -swipeThreshold {
+                            dismiss(to: .top) { onSwipe(.favorite) }
+                        } else {
+                            reset()
                         }
-                )
-                .overlay(alignment: .top) { swipeLabel }
+                    }
+            )
+            .overlay(alignment: .top) { swipeLabel }
+        }
+        .onAppear {
+            guard !didAppear else { return }
+            didAppear = true
+
+            if !isFirstCard {
+                flipAngle = 180
+                showFront = true
+                showImage = true
+                isReady = true
+                showNextCard = true
+                animationStarted = true
+                return
+            }
+
+            // First card: start off-screen
+            slideOffset = 800
+            if photo.thumbnail != nil {
+                animateEntrance()
+            }
+        }
+        .onChange(of: photo.thumbnail) { _, newValue in
+            if newValue != nil && !animationStarted && isFirstCard {
+                animateEntrance()
+            }
+        }
+    }
+
+    private func animateEntrance() {
+        guard !animationStarted else { return }
+        animationStarted = true
+        // Step 1: slide up with bounce
+        withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+            slideOffset = 0
+        }
+        // Step 2: flip
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+            withAnimation(.easeInOut(duration: 0.5)) {
+                flipAngle = 180
+            }
+        }
+        // Step 3: at ~90° — hide back, show empty frame
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.95) {
+            showFront = true
+        }
+        // Step 4: after flip done — fade in the photo
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
+            withAnimation(.easeIn(duration: 0.35)) {
+                showImage = true
+            }
+        }
+        // Step 5: enable interaction
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
+            showNextCard = true
+            isReady = true
         }
     }
 
