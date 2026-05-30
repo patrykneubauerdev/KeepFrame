@@ -91,6 +91,21 @@ final class PhotoDeckViewModel {
         trashBin = []
     }
 
+    func endSessionWithoutDeleting() {
+        guard let session = activeSession, let ctx = modelContext else { return }
+        session.isActive = false
+        session.endDate = .now
+        // Only subtract photos still in trash (not yet deleted)
+        session.deletedCount -= trashBin.count
+        session.deletedIdentifiers = []
+        try? ctx.save()
+        activeSession = nil
+        hasActiveSession = false
+        photos = []
+        currentIndex = 0
+        trashBin = []
+    }
+
     // MARK: - Actions
 
     func perform(_ action: SwipeAction) {
@@ -133,6 +148,10 @@ final class PhotoDeckViewModel {
     func emptyTrash() async throws {
         let assets = trashBin.map(\.asset)
         try await service.deleteAssets(assets)
+        activeSession?.deletedIdentifiers.removeAll { id in
+            trashBin.contains { $0.id == id }
+        }
+        try? modelContext?.save()
         trashBin = []
     }
 

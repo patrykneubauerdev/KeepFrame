@@ -61,7 +61,7 @@ struct KeepFrameView: View {
                 }
                 Button("Zakończ bez usuwania") {
                     viewModel.clearTrash()
-                    viewModel.endSession()
+                    viewModel.endSessionWithoutDeleting()
                 }
             } else {
                 Button("Zakończ") { viewModel.endSession() }
@@ -109,12 +109,15 @@ struct KeepFrameView: View {
 
             HStack(spacing: 40) {
                 ActionButton(icon: "xmark", color: .red) {
+                    isFirstReveal = false
                     viewModel.perform(.delete)
                 }
                 ActionButton(icon: "star.fill", color: .yellow) {
+                    isFirstReveal = false
                     viewModel.perform(.favorite)
                 }
                 ActionButton(icon: "checkmark", color: .green) {
+                    isFirstReveal = false
                     viewModel.perform(.keep)
                 }
             }
