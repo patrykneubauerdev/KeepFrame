@@ -10,13 +10,17 @@ import SwiftUI
 struct TrashBinView: View {
     @Bindable var viewModel: PhotoDeckViewModel
     @Environment(\.dismiss) private var dismiss
-    @State private var selectedItems: Set<String> = []
     @State private var showDeleteAlert = false
     @State private var showRestoreAlert = false
 
+    private var selectedItems: Set<String> {
+        get { viewModel.trashSelection ?? [] }
+        nonmutating set { viewModel.trashSelection = newValue }
+    }
+
     var body: some View {
         NavigationStack {
-            Group {
+            ZStack(alignment: .bottom) {
                 if viewModel.trashBin.isEmpty {
                     ContentUnavailableView(
                         "Koszyk pusty",
@@ -24,13 +28,29 @@ struct TrashBinView: View {
                         description: Text("Zdjęcia swipe'owane w lewo trafią tutaj")
                     )
                 } else {
-                    VStack(spacing: 0) {
-                        if !selectedItems.isEmpty {
-                            selectionBar
+                    ScrollView {
+                        LazyVGrid(
+                            columns: [GridItem(.adaptive(minimum: 110), spacing: 3)],
+                            spacing: 3
+                        ) {
+                            ForEach(viewModel.trashBin) { item in
+                                TrashItemCell(
+                                    item: item,
+                                    isSelected: selectedItems.contains(item.id),
+                                    viewModel: viewModel
+                                ) {
+                                    toggleSelection(item.id)
+                                }
+                            }
                         }
-                        trashGrid
-                        deleteAllButton
+                        .padding(.horizontal, 3)
+                        .padding(.bottom, 100)
                     }
+                }
+
+                // Bottom action bar
+                if !viewModel.trashBin.isEmpty {
+                    bottomBar
                 }
             }
             .navigationTitle("Koszyk (\(viewModel.trashCount))")
@@ -38,29 +58,23 @@ struct TrashBinView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     if !viewModel.trashBin.isEmpty {
-                        Button(selectedItems.count == viewModel.trashCount ? "Odznacz" : "Zaznacz wszystkie") {
+                        Button(selectedItems.count == viewModel.trashCount ? "Odznacz wszystko" : "Zaznacz wszystko") {
                             if selectedItems.count == viewModel.trashCount {
                                 selectedItems.removeAll()
                             } else {
                                 selectedItems = Set(viewModel.trashBin.map(\.id))
                             }
                         }
-                        .font(.caption)
+                        .font(.subheadline)
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Gotowe") { dismiss() }
+                    Button { dismiss() } label: {
+                        Image(systemName: "xmark")
+                            .font(.footnote.weight(.bold))
+                            .foregroundStyle(.white)
+                    }
                 }
-            }
-            .alert("Przywrócić zdjęcia?", isPresented: $showRestoreAlert) {
-                Button("Anuluj", role: .cancel) {}
-                Button("Przywróć") {
-                    let toRestore = viewModel.trashBin.filter { selectedItems.contains($0.id) }
-                    viewModel.restoreFromTrash(toRestore)
-                    selectedItems.removeAll()
-                }
-            } message: {
-                Text("Zaznaczone zdjęcia wrócą do puli do przejrzenia.")
             }
             .alert("Usunąć \(viewModel.trashCount) zdjęć?", isPresented: $showDeleteAlert) {
                 Button("Anuluj", role: .cancel) {}
@@ -73,65 +87,55 @@ struct TrashBinView: View {
             } message: {
                 Text("Zdjęcia trafią do kosza systemowego na 30 dni.")
             }
+            .alert("Przywrócić \(selectedItems.count) zdjęć?", isPresented: $showRestoreAlert) {
+                Button("Anuluj", role: .cancel) {}
+                Button("Przywróć") {
+                    let toRestore = viewModel.trashBin.filter { selectedItems.contains($0.id) }
+                    viewModel.restoreFromTrash(toRestore)
+                    selectedItems.removeAll()
+                }
+            } message: {
+                Text("Zaznaczone zdjęcia wrócą do puli do przejrzenia.")
+            }
         }
     }
 
-    // MARK: - Selection Bar
+    // MARK: - Bottom Bar
 
-    private var selectionBar: some View {
-        HStack {
-            Text("\(selectedItems.count) zaznaczonych")
-                .font(.subheadline.bold())
-            Spacer()
+    private var bottomBar: some View {
+        HStack(spacing: 12) {
+            // Restore button
             Button {
                 showRestoreAlert = true
             } label: {
-                Label("Przywróć", systemImage: "arrow.uturn.backward")
-                    .font(.subheadline.bold())
+                Label(
+                    selectedItems.isEmpty ? "Przywróć" : "Przywróć (\(selectedItems.count))",
+                    systemImage: "arrow.uturn.backward"
+                )
+                .font(.subheadline.weight(.semibold))
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 14)
             }
-            .tint(.green)
+            .disabled(selectedItems.isEmpty)
+            .tint(selectedItems.isEmpty ? .gray : Color("turq"))
+            .buttonStyle(.borderedProminent)
+            .glassEffect(.regular.interactive())
+
+            // Delete all button
+            Button {
+                showDeleteAlert = true
+            } label: {
+                Label("Usuń wszystkie", systemImage: "trash.fill")
+                    .font(.subheadline.weight(.semibold))
+                    .padding(.vertical, 14)
+                    .padding(.horizontal, 4)
+            }
+            .tint(.red)
+            .buttonStyle(.bordered)
+            .glassEffect(.regular.interactive())
         }
         .padding(.horizontal)
-        .padding(.vertical, 10)
-        .background(.ultraThinMaterial)
-    }
-
-    // MARK: - Grid
-
-    private var trashGrid: some View {
-        ScrollView {
-            LazyVGrid(
-                columns: [GridItem(.adaptive(minimum: 100), spacing: 2)],
-                spacing: 2
-            ) {
-                ForEach(viewModel.trashBin) { item in
-                    TrashItemCell(
-                        item: item,
-                        isSelected: selectedItems.contains(item.id),
-                        viewModel: viewModel
-                    ) {
-                        toggleSelection(item.id)
-                    }
-                }
-            }
-        }
-    }
-
-    // MARK: - Delete Button
-
-    private var deleteAllButton: some View {
-        Button {
-            showDeleteAlert = true
-        } label: {
-            Label("Usuń wszystkie (\(viewModel.trashCount))", systemImage: "trash.fill")
-                .font(.headline)
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(.red)
-                .clipShape(RoundedRectangle(cornerRadius: 14))
-        }
-        .padding()
+        .padding(.bottom, 8)
     }
 
     private func toggleSelection(_ id: String) {
@@ -154,33 +158,31 @@ private struct TrashItemCell: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            Group {
-                if let thumbnail {
-                    Image(uiImage: thumbnail)
-                        .resizable()
-                        .scaledToFill()
-                } else {
-                    Rectangle().fill(.gray.opacity(0.2))
-                        .overlay { ProgressView() }
+            Color.clear
+                .aspectRatio(1, contentMode: .fit)
+                .overlay {
+                    if let thumbnail {
+                        Image(uiImage: thumbnail)
+                            .resizable()
+                            .scaledToFill()
+                    } else {
+                        Rectangle().fill(.gray.opacity(0.15))
+                            .overlay { ProgressView().tint(Color("turq")) }
+                    }
                 }
-            }
-            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100, maxHeight: 100)
-            .clipped()
-
-            if isSelected {
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(.white, .blue)
-                    .font(.title3)
-                    .padding(6)
-            } else {
-                Image(systemName: "circle")
-                    .foregroundStyle(.white.opacity(0.7))
-                    .font(.title3)
-                    .padding(6)
-            }
+                .clipped()
         }
-        .overlay(isSelected ? Color.blue.opacity(0.2) : Color.clear)
-        .clipShape(RoundedRectangle(cornerRadius: 4))
+        .aspectRatio(1, contentMode: .fit)
+        .contentShape(Rectangle())
+        .overlay(alignment: .topLeading) {
+            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                .foregroundStyle(isSelected ? Color("turq") : .white.opacity(0.8))
+                .font(.title3)
+                .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
+                .padding(6)
+        }
+        .overlay(isSelected ? Color("turq").opacity(0.15) : Color.clear)
+        .clipShape(RoundedRectangle(cornerRadius: 6))
         .onTapGesture { onTap() }
         .task { thumbnail = await viewModel.loadTrashThumbnail(for: item) }
     }

@@ -12,17 +12,13 @@ struct PolaroidCard: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Group {
+            ZStack {
+                Color.white
                 if let image {
                     Image(uiImage: image)
                         .resizable()
                         .scaledToFill()
-                } else {
-                    Rectangle()
-                        .fill(.gray.opacity(0.2))
-                        .overlay {
-                            ProgressView()
-                        }
+                        .transition(.opacity)
                 }
             }
             .frame(width: 280, height: 340)
@@ -35,6 +31,25 @@ struct PolaroidCard: View {
         }
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 4))
+        .shadow(color: .black.opacity(0.15), radius: 10, x: 0, y: 4)
+    }
+}
+
+struct CardBack: View {
+    var body: some View {
+        VStack {
+            Image("iconKFturq")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 120, height: 120)
+        }
+        .frame(width: 312, height: 396)
+        .background(.white)
+        .clipShape(RoundedRectangle(cornerRadius: 4))
+        .overlay(
+            RoundedRectangle(cornerSize: .zero)
+                .stroke(Color("turq"), lineWidth: 12)
+        )
         .shadow(color: .black.opacity(0.15), radius: 10, x: 0, y: 4)
     }
 }

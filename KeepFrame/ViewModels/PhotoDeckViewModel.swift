@@ -16,6 +16,7 @@ final class PhotoDeckViewModel {
     private(set) var isLoading = false
     private(set) var authorizationDenied = false
     private(set) var trashBin: [PhotoItem] = []
+    var trashSelection: Set<String>?
     private(set) var hasActiveSession = false
 
     var activeSession: SessionRecord?
@@ -39,6 +40,7 @@ final class PhotoDeckViewModel {
     var trashCount: Int { trashBin.count }
 
     func setup(modelContext: ModelContext) {
+        guard self.modelContext == nil else { return }
         self.modelContext = modelContext
         Task { await loadSession() }
     }
@@ -61,10 +63,21 @@ final class PhotoDeckViewModel {
     func resumeSession() async {
         guard let session = activeSession else { return }
         await requestAccessAndLoad()
-        let ids = Set(session.assetIdentifiers)
-        photos = photos.filter { ids.contains($0.id) }
-        currentIndex = session.currentIndex
+        
+        // Rebuild photos in original session order
+        let photoMap = Dictionary(uniqueKeysWithValues: photos.map { ($0.id, $0) })
+        photos = session.assetIdentifiers.compactMap { photoMap[$0] }
+
+        // Restore trash bin
+        let deletedIds = Set(session.deletedIdentifiers)
+        trashBin = photos.filter { deletedIds.contains($0.id) }
+
+        currentIndex = min(session.currentIndex, photos.count)
         hasActiveSession = true
+
+        for i in currentIndex..<min(currentIndex + 3, photos.count) {
+            await loadThumbnail(for: i)
+        }
     }
 
     func endSession() {
@@ -79,16 +92,33 @@ final class PhotoDeckViewModel {
         trashBin = []
     }
 
+    func endSessionWithoutDeleting() {
+        guard let session = activeSession, let ctx = modelContext else { return }
+        session.isActive = false
+        session.endDate = .now
+        // Only subtract photos still in trash (not yet deleted)
+        session.deletedCount -= trashBin.count
+        session.deletedIdentifiers = []
+        try? ctx.save()
+        activeSession = nil
+        hasActiveSession = false
+        photos = []
+        currentIndex = 0
+        trashBin = []
+    }
+
     // MARK: - Actions
 
     func perform(_ action: SwipeAction) {
         guard currentIndex < photos.count else { return }
+        trashSelection = nil
         let photo = photos[currentIndex]
 
         switch action {
         case .delete:
             trashBin.append(photo)
             activeSession?.deletedCount += 1
+            activeSession?.deletedIdentifiers.append(photo.id)
         case .favorite:
             activeSession?.favoritedCount += 1
             activeSession?.favoriteIdentifiers.append(photo.id)
@@ -112,6 +142,7 @@ final class PhotoDeckViewModel {
     func restoreFromTrash(_ photos: [PhotoItem]) {
         let ids = Set(photos.map(\.id))
         trashBin.removeAll { ids.contains($0.id) }
+        activeSession?.deletedIdentifiers.removeAll { ids.contains($0) }
         activeSession?.deletedCount -= photos.count
         try? modelContext?.save()
     }
@@ -119,6 +150,10 @@ final class PhotoDeckViewModel {
     func emptyTrash() async throws {
         let assets = trashBin.map(\.asset)
         try await service.deleteAssets(assets)
+        activeSession?.deletedIdentifiers.removeAll { id in
+            trashBin.contains { $0.id == id }
+        }
+        try? modelContext?.save()
         trashBin = []
     }
 
