@@ -60,7 +60,6 @@ struct KeepFrameView: View {
                     }
                 }
                 Button("Zakończ bez usuwania") {
-                    viewModel.clearTrash()
                     viewModel.endSessionWithoutDeleting()
                 }
             } else {
