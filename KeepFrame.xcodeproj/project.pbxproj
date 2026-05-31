@@ -3,28 +3,49 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 100;
 	objects = {
 
-/* Begin PBXFileReference section */
-		84AB4EE72FB4D6AB00654C65 /* KeepFrame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KeepFrame.app; sourceTree = BUILT_PRODUCTS_DIR; };
-/* End PBXFileReference section */
+/* Begin PBXBuildFile section */
+		8459DDF32FBBC63C008FF482 /* icon-KeepFrame.icon in Resources */ = {isa = PBXBuildFile; fileRef = 8459DDF22FBBC63C008FF482 /* icon-KeepFrame.icon */; };
+		8459DE112FBE084B008FF482 /* SessionRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459DE102FBE084B008FF482 /* SessionRecord.swift */; };
+		8459DE132FBE085B008FF482 /* PhotoLibraryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459DE122FBE085B008FF482 /* PhotoLibraryService.swift */; };
+		8459DE152FBE086F008FF482 /* SessionHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459DE142FBE086F008FF482 /* SessionHistoryView.swift */; };
+		8459DE172FBE0B6E008FF482 /* TrashBinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459DE162FBE0B6E008FF482 /* TrashBinView.swift */; };
+		8459DE192FBE12BA008FF482 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459DE182FBE12BA008FF482 /* WelcomeView.swift */; };
+		84AB4F2C2FBA3CB400654C65 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84AB4F292FBA3CB400654C65 /* Assets.xcassets */; };
+		84AB4F2D2FBA3CB400654C65 /* PhotoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB4F1E2FBA3CB400654C65 /* PhotoItem.swift */; };
+		84AB4F2E2FBA3CB400654C65 /* PhotoDeckViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB4F222FBA3CB400654C65 /* PhotoDeckViewModel.swift */; };
+		84AB4F2F2FBA3CB400654C65 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB4F242FBA3CB400654C65 /* ActionButton.swift */; };
+		84AB4F302FBA3CB400654C65 /* KeepFrameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB4F252FBA3CB400654C65 /* KeepFrameView.swift */; };
+		84AB4F312FBA3CB400654C65 /* PolaroidCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB4F262FBA3CB400654C65 /* PolaroidCard.swift */; };
+		84AB4F322FBA3CB400654C65 /* SwipeableCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB4F272FBA3CB400654C65 /* SwipeableCardView.swift */; };
+		84AB4F332FBA3CB400654C65 /* KeepFrameApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB4F2A2FBA3CB400654C65 /* KeepFrameApp.swift */; };
+/* End PBXBuildFile section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		84AB4EE92FB4D6AB00654C65 /* KeepFrame */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = KeepFrame;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
+/* Begin PBXFileReference section */
+		8459DDF22FBBC63C008FF482 /* icon-KeepFrame.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "icon-KeepFrame.icon"; sourceTree = "<group>"; };
+		8459DE102FBE084B008FF482 /* SessionRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRecord.swift; sourceTree = "<group>"; };
+		8459DE122FBE085B008FF482 /* PhotoLibraryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryService.swift; sourceTree = "<group>"; };
+		8459DE142FBE086F008FF482 /* SessionHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionHistoryView.swift; sourceTree = "<group>"; };
+		8459DE162FBE0B6E008FF482 /* TrashBinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashBinView.swift; sourceTree = "<group>"; };
+		8459DE182FBE12BA008FF482 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		84AB4EE72FB4D6AB00654C65 /* KeepFrame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KeepFrame.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		84AB4F1E2FBA3CB400654C65 /* PhotoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoItem.swift; sourceTree = "<group>"; };
+		84AB4F222FBA3CB400654C65 /* PhotoDeckViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDeckViewModel.swift; sourceTree = "<group>"; };
+		84AB4F242FBA3CB400654C65 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
+		84AB4F252FBA3CB400654C65 /* KeepFrameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepFrameView.swift; sourceTree = "<group>"; };
+		84AB4F262FBA3CB400654C65 /* PolaroidCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolaroidCard.swift; sourceTree = "<group>"; };
+		84AB4F272FBA3CB400654C65 /* SwipeableCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableCardView.swift; sourceTree = "<group>"; };
+		84AB4F292FBA3CB400654C65 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		84AB4F2A2FBA3CB400654C65 /* KeepFrameApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepFrameApp.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		84AB4EE42FB4D6AB00654C65 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -32,7 +53,7 @@
 		84AB4EDE2FB4D6AB00654C65 = {
 			isa = PBXGroup;
 			children = (
-				84AB4EE92FB4D6AB00654C65 /* KeepFrame */,
+				84AB4F2B2FBA3CB400654C65 /* KeepFrame */,
 				84AB4EE82FB4D6AB00654C65 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +64,91 @@
 				84AB4EE72FB4D6AB00654C65 /* KeepFrame.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		84AB4F1D2FBA3CB400654C65 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		84AB4F1F2FBA3CB400654C65 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				84AB4F1E2FBA3CB400654C65 /* PhotoItem.swift */,
+				8459DE102FBE084B008FF482 /* SessionRecord.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		84AB4F202FBA3CB400654C65 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				84AB4F292FBA3CB400654C65 /* Assets.xcassets */,
+				8459DDF22FBBC63C008FF482 /* icon-KeepFrame.icon */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		84AB4F212FBA3CB400654C65 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				8459DE122FBE085B008FF482 /* PhotoLibraryService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		84AB4F232FBA3CB400654C65 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				84AB4F222FBA3CB400654C65 /* PhotoDeckViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		84AB4F282FBA3CB400654C65 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				84AB4F342FBA3D1600654C65 /* Screens */,
+				84AB4F352FBA3D1E00654C65 /* Components */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		84AB4F2B2FBA3CB400654C65 /* KeepFrame */ = {
+			isa = PBXGroup;
+			children = (
+				84AB4F1F2FBA3CB400654C65 /* Models */,
+				84AB4F232FBA3CB400654C65 /* ViewModels */,
+				84AB4F282FBA3CB400654C65 /* Views */,
+				84AB4F1D2FBA3CB400654C65 /* Extensions */,
+				84AB4F212FBA3CB400654C65 /* Services */,
+				84AB4F202FBA3CB400654C65 /* Resources */,
+				84AB4F2A2FBA3CB400654C65 /* KeepFrameApp.swift */,
+			);
+			path = KeepFrame;
+			sourceTree = "<group>";
+		};
+		84AB4F342FBA3D1600654C65 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				84AB4F252FBA3CB400654C65 /* KeepFrameView.swift */,
+				8459DE142FBE086F008FF482 /* SessionHistoryView.swift */,
+				84AB4F272FBA3CB400654C65 /* SwipeableCardView.swift */,
+				8459DE162FBE0B6E008FF482 /* TrashBinView.swift */,
+				8459DE182FBE12BA008FF482 /* WelcomeView.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		84AB4F352FBA3D1E00654C65 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				84AB4F262FBA3CB400654C65 /* PolaroidCard.swift */,
+				84AB4F242FBA3CB400654C65 /* ActionButton.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -58,14 +164,7 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				84AB4EE92FB4D6AB00654C65 /* KeepFrame */,
-			);
 			name = KeepFrame;
-			packageProductDependencies = (
-			);
 			productName = KeepFrame;
 			productReference = 84AB4EE72FB4D6AB00654C65 /* KeepFrame.app */;
 			productType = "com.apple.product-type.application";
@@ -94,7 +193,7 @@
 			);
 			mainGroup = 84AB4EDE2FB4D6AB00654C65;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
+			preferredProjectObjectVersion = 100;
 			productRefGroup = 84AB4EE82FB4D6AB00654C65 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -107,25 +206,35 @@
 /* Begin PBXResourcesBuildPhase section */
 		84AB4EE52FB4D6AB00654C65 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
+				8459DDF32FBBC63C008FF482 /* icon-KeepFrame.icon in Resources */,
+				84AB4F2C2FBA3CB400654C65 /* Assets.xcassets in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		84AB4EE32FB4D6AB00654C65 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
+				8459DE152FBE086F008FF482 /* SessionHistoryView.swift in Sources */,
+				84AB4F2D2FBA3CB400654C65 /* PhotoItem.swift in Sources */,
+				8459DE112FBE084B008FF482 /* SessionRecord.swift in Sources */,
+				84AB4F2E2FBA3CB400654C65 /* PhotoDeckViewModel.swift in Sources */,
+				84AB4F2F2FBA3CB400654C65 /* ActionButton.swift in Sources */,
+				84AB4F302FBA3CB400654C65 /* KeepFrameView.swift in Sources */,
+				8459DE172FBE0B6E008FF482 /* TrashBinView.swift in Sources */,
+				8459DE192FBE12BA008FF482 /* WelcomeView.swift in Sources */,
+				84AB4F312FBA3CB400654C65 /* PolaroidCard.swift in Sources */,
+				8459DE132FBE085B008FF482 /* PhotoLibraryService.swift in Sources */,
+				84AB4F322FBA3CB400654C65 /* SwipeableCardView.swift in Sources */,
+				84AB4F332FBA3CB400654C65 /* KeepFrameApp.swift in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		84AB4EF02FB4D6AD00654C65 /* Debug */ = {
+		84AB4EF02FB4D6AD00654C65 /* Debug configuration for PBXProject "KeepFrame" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -189,7 +298,7 @@
 			};
 			name = Debug;
 		};
-		84AB4EF12FB4D6AD00654C65 /* Release */ = {
+		84AB4EF12FB4D6AD00654C65 /* Release configuration for PBXProject "KeepFrame" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -246,21 +355,23 @@
 			};
 			name = Release;
 		};
-		84AB4EF32FB4D6AD00654C65 /* Debug */ = {
+		84AB4EF32FB4D6AD00654C65 /* Debug configuration for PBXNativeTarget "KeepFrame" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "icon-KeepFrame";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = J86JB5864R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = KeepFrame/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -278,21 +389,23 @@
 			};
 			name = Debug;
 		};
-		84AB4EF42FB4D6AD00654C65 /* Release */ = {
+		84AB4EF42FB4D6AD00654C65 /* Release configuration for PBXNativeTarget "KeepFrame" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "icon-KeepFrame";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = J86JB5864R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = KeepFrame/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -316,19 +429,17 @@
 		84AB4EE22FB4D6AB00654C65 /* Build configuration list for PBXProject "KeepFrame" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				84AB4EF02FB4D6AD00654C65 /* Debug */,
-				84AB4EF12FB4D6AD00654C65 /* Release */,
+				84AB4EF02FB4D6AD00654C65 /* Debug configuration for PBXProject "KeepFrame" */,
+				84AB4EF12FB4D6AD00654C65 /* Release configuration for PBXProject "KeepFrame" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		84AB4EF22FB4D6AD00654C65 /* Build configuration list for PBXNativeTarget "KeepFrame" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				84AB4EF32FB4D6AD00654C65 /* Debug */,
-				84AB4EF42FB4D6AD00654C65 /* Release */,
+				84AB4EF32FB4D6AD00654C65 /* Debug configuration for PBXNativeTarget "KeepFrame" */,
+				84AB4EF42FB4D6AD00654C65 /* Release configuration for PBXNativeTarget "KeepFrame" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
