@@ -10,9 +10,13 @@ import SwiftUI
 struct TrashBinView: View {
     @Bindable var viewModel: PhotoDeckViewModel
     @Environment(\.dismiss) private var dismiss
-    @State private var selectedItems: Set<String> = []
     @State private var showDeleteAlert = false
     @State private var showRestoreAlert = false
+
+    private var selectedItems: Set<String> {
+        get { viewModel.trashSelection ?? [] }
+        nonmutating set { viewModel.trashSelection = newValue }
+    }
 
     var body: some View {
         NavigationStack {
@@ -92,9 +96,6 @@ struct TrashBinView: View {
                 }
             } message: {
                 Text("Zaznaczone zdjęcia wrócą do puli do przejrzenia.")
-            }
-            .onAppear {
-                selectedItems = Set(viewModel.trashBin.map(\.id))
             }
         }
     }

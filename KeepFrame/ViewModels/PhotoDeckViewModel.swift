@@ -16,6 +16,7 @@ final class PhotoDeckViewModel {
     private(set) var isLoading = false
     private(set) var authorizationDenied = false
     private(set) var trashBin: [PhotoItem] = []
+    var trashSelection: Set<String>?
     private(set) var hasActiveSession = false
 
     var activeSession: SessionRecord?
@@ -110,6 +111,7 @@ final class PhotoDeckViewModel {
 
     func perform(_ action: SwipeAction) {
         guard currentIndex < photos.count else { return }
+        trashSelection = nil
         let photo = photos[currentIndex]
 
         switch action {
