@@ -50,6 +50,14 @@ final class PhotoDeckViewModel {
     func startNewSession() async {
         await requestAccessAndLoad()
         guard let ctx = modelContext else { return }
+        // Deactivate any lingering active sessions
+        let descriptor = FetchDescriptor<SessionRecord>(predicate: #Predicate { $0.isActive })
+        if let stale = try? ctx.fetch(descriptor) {
+            for s in stale {
+                s.isActive = false
+                s.endDate = s.endDate ?? .now
+            }
+        }
         let session = SessionRecord()
         session.assetIdentifiers = photos.map(\.id)
         ctx.insert(session)
@@ -191,6 +199,14 @@ final class PhotoDeckViewModel {
         photos = assets.map { PhotoItem(asset: $0) }
 
         guard let ctx = modelContext else { return }
+        // Deactivate any lingering active sessions
+        let descriptor = FetchDescriptor<SessionRecord>(predicate: #Predicate { $0.isActive })
+        if let stale = try? ctx.fetch(descriptor) {
+            for s in stale {
+                s.isActive = false
+                s.endDate = s.endDate ?? .now
+            }
+        }
         let session = SessionRecord()
         session.assetIdentifiers = photos.map(\.id)
         ctx.insert(session)
@@ -253,9 +269,14 @@ final class PhotoDeckViewModel {
             predicate: #Predicate { $0.isActive },
             sortBy: [SortDescriptor(\.startDate, order: .reverse)]
         )
-        if let existing = try? ctx.fetch(descriptor).first {
-            activeSession = existing
-            await resumeSession()
+        guard let activeSessions = try? ctx.fetch(descriptor), let newest = activeSessions.first else { return }
+        // Deactivate duplicates, keep only the newest
+        for s in activeSessions.dropFirst() {
+            s.isActive = false
+            s.endDate = s.endDate ?? .now
         }
+        try? ctx.save()
+        activeSession = newest
+        await resumeSession()
     }
 }
