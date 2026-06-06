@@ -41,6 +41,10 @@ struct SwipeableCardView: View {
             PolaroidCard(image: showImage ? photo.thumbnail : nil)
                 .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
                 .opacity(showFront ? 1 : 0)
+                .overlay {
+                    swipeLabel
+                        .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+                }
         }
         .rotation3DEffect(.degrees(flipAngle), axis: (x: 0, y: 1, z: 0), perspective: 0.5)
         .offset(x: offset.width, y: offset.height + slideOffset)
@@ -71,7 +75,6 @@ struct SwipeableCardView: View {
                     }
                 }
         )
-        .overlay(alignment: .top) { swipeLabel }
         .onAppear {
             guard !didAppear else { return }
             didAppear = true
@@ -132,29 +135,33 @@ struct SwipeableCardView: View {
 
     @ViewBuilder
     private var swipeLabel: some View {
-        let progress = min(dragMagnitude / 100, 1)
-        if offset.width < -50 {
-            Text("USUŃ")
-                .font(.title.bold())
-                .foregroundStyle(.red)
-                .opacity(progress)
-                .padding(8)
-                .offset(y: -40)
-        } else if offset.width > 50 {
-            Text("ZACHOWAJ")
-                .font(.title.bold())
-                .foregroundStyle(.green)
-                .opacity(progress)
-                .padding(8)
-                .offset(y: -40)
-        } else if offset.height < -50 {
-            Text("ULUBIONE")
-                .font(.title.bold())
-                .foregroundStyle(.yellow)
-                .opacity(progress)
-                .padding(8)
-                .offset(y: -40)
+        let progress = max(0, min((dragMagnitude - 68) / 120, 1))
+        ZStack {
+            stampView(text: "USUNĄĆ", color: .red, angle: -15)
+                .opacity(offset.width < -55 ? progress : 0)
+                .offset(x: 30, y: -80)
+
+            stampView(text: "ZACHOWAĆ", color: .green, angle: -15)
+                .opacity(offset.width > 55 ? progress : 0)
+                .offset(x: -15, y: -80)
+
+            stampView(text: "ULUBIONE", color: .yellow, angle: -5)
+                .opacity(offset.height < -55 && abs(offset.width) <= 55 ? progress : 0)
         }
+        .allowsHitTesting(false)
+    }
+
+    private func stampView(text: String, color: Color, angle: Double) -> some View {
+        Text(text)
+            .font(.system(size: 32, weight: .bold, design: .rounded))
+            .foregroundStyle(color)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+            .overlay(
+                RoundedRectangle(cornerRadius: 6)
+                    .stroke(color, lineWidth: 4)
+            )
+            .rotationEffect(.degrees(angle))
     }
 
     private func dismiss(to edge: Edge, completion: @escaping () -> Void) {

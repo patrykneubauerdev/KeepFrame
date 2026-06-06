@@ -30,6 +30,7 @@ struct PolaroidCard: View {
                 .frame(height: 40)
         }
         .background(.white)
+        .clipShape(Rectangle())
         .shadow(color: .black.opacity(0.15), radius: 10, x: 0, y: 4)
     }
 }
