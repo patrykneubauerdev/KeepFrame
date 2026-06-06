@@ -21,7 +21,9 @@ struct KeepFrameView: View {
     @State private var dragProgress: CGFloat = 0
 
     var body: some View {
-        Group {
+        ZStack {
+            Color("turq").opacity(0.7).ignoresSafeArea()
+
             if viewModel.authorizationDenied {
                 deniedView
             } else if let photo = viewModel.currentPhoto {
@@ -33,19 +35,20 @@ struct KeepFrameView: View {
                     .frame(height: 420)
             }
         }
-        .navigationTitle("KeepFrame")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button { showHistory = true } label: {
-                    Image(systemName: "clock.arrow.circlepath")
+                    HStack(spacing: 4) {
+                        Image(systemName: "clock.arrow.circlepath")
+                        Text("Historia")
+                            .font(.subheadline)
+                    }
+                    .foregroundStyle(.white)
                 }
             }
             ToolbarItem(placement: .topBarTrailing) {
                 trashButton
-            }
-            ToolbarItem(placement: .bottomBar) {
-                Button("Zakończ sesję") { showEndSessionAlert = true }
-                    .foregroundStyle(.red)
             }
         }
         .sheet(isPresented: $showHistory) {
@@ -85,22 +88,27 @@ struct KeepFrameView: View {
         Button { showTrash = true } label: {
             HStack(spacing: 4) {
                 Image(systemName: "trash")
+                Text("Koszyk")
+                    .font(.subheadline)
                 if viewModel.trashCount > 0 {
                     Text("\(viewModel.trashCount)")
                         .font(.caption2.bold())
                         .foregroundStyle(.white)
                         .padding(.horizontal, 6)
                         .padding(.vertical, 2)
+                        .frame(minWidth: 22)
                         .background(.red, in: Capsule())
                 }
             }
+            .foregroundStyle(.white)
+            .animation(.easeInOut(duration: 0.2), value: viewModel.trashCount)
         }
     }
 
     // MARK: - Subviews
 
     private func deckView(photo: PhotoItem) -> some View {
-        VStack(spacing: 32) {
+        VStack(spacing: 20) {
             Spacer()
 
             ZStack {
@@ -192,11 +200,42 @@ struct KeepFrameView: View {
                 .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.16), value: showButtons)
             }
 
-            Text("\(viewModel.remainingCount) zdjęć pozostało")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .opacity(showButtons ? 1 : 0)
-                .animation(.easeOut(duration: 0.3).delay(0.25), value: showButtons)
+            VStack(spacing: 8) {
+                HStack(spacing: 16) {
+                    statLabel(icon: "trash", value: viewModel.activeSession?.deletedCount ?? 0, color: .red)
+                    statLabel(icon: "star.fill", value: viewModel.activeSession?.favoritedCount ?? 0, color: .yellow)
+                    statLabel(icon: "checkmark", value: viewModel.activeSession?.keptCount ?? 0, color: .green)
+                }
+                .padding(.horizontal, 28)
+                .padding(.vertical, 12)
+                .glassEffect(.regular, in: .capsule)
+
+                HStack(spacing: 4) {
+                    Image(systemName: "photo.stack")
+                        .font(.caption)
+                        .foregroundStyle(.white.opacity(0.7))
+                    Text("\(100000) pozostało")
+                        .font(.subheadline.bold())
+                        .foregroundStyle(.white)
+                }
+                .frame(minWidth: 160)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 10)
+                .glassEffect(.regular, in: .capsule)
+            }
+            .opacity(showButtons ? 1 : 0)
+            .animation(.easeOut(duration: 0.3).delay(0.25), value: showButtons)
+
+            Button { showEndSessionAlert = true } label: {
+                Text("Zakończ sesję")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.red)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+            }
+            .glassEffect(.regular, in: .capsule)
+            .opacity(showButtons ? 1 : 0)
+            .animation(.easeOut(duration: 0.3).delay(0.35), value: showButtons)
 
             Spacer()
         }
@@ -207,17 +246,38 @@ struct KeepFrameView: View {
         VStack(spacing: 16) {
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 64))
-                .foregroundStyle(.green)
+                .foregroundStyle(Color("turq"))
             Text("Wszystkie zdjęcia przejrzane!")
                 .font(.title2.bold())
+                .foregroundStyle(.white)
             if viewModel.trashCount > 0 {
                 Button { showTrash = true } label: {
                     Label("Przejrzyj koszyk (\(viewModel.trashCount))", systemImage: "trash")
+                        .font(.subheadline.weight(.semibold))
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(.red)
+                .glassEffect(.regular.interactive())
             }
         }
+    }
+
+    private func statLabel(icon: String, value: Int, color: Color) -> some View {
+        HStack(spacing: 4) {
+            Image(systemName: icon)
+                .font(.caption)
+                .foregroundStyle(.white.opacity(0.7))
+            Text(compactNumber(value))
+                .font(.subheadline.bold())
+                .foregroundStyle(.white)
+                .frame(minWidth: 28)
+        }
+    }
+
+    private func compactNumber(_ value: Int) -> String {
+        if value >= 100_000 { return "\(value / 1000)k" }
+        if value >= 10_000 { return String(format: "%.1fk", Double(value) / 1000) }
+        return "\(value)"
     }
 
     private var deniedView: some View {
@@ -227,9 +287,10 @@ struct KeepFrameView: View {
                 .foregroundStyle(.red)
             Text("Brak dostępu do zdjęć")
                 .font(.headline)
+                .foregroundStyle(.white)
             Text("Włącz dostęp w Ustawieniach → Prywatność → Zdjęcia")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.white.opacity(0.5))
                 .multilineTextAlignment(.center)
         }
         .padding()

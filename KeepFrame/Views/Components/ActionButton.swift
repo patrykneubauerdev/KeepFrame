@@ -18,8 +18,13 @@ struct ActionButton: View {
                 .font(.title2.weight(.bold))
                 .foregroundStyle(color)
                 .frame(width: 56, height: 56)
-                .background(color.opacity(0.12))
+                .background(color.opacity(0.15))
                 .clipShape(Circle())
+                .overlay(
+                    Circle()
+                        .strokeBorder(color.opacity(0.4), lineWidth: 1.5)
+                )
+                .glassEffect(.regular.interactive(), in: .circle)
         }
     }
 }
