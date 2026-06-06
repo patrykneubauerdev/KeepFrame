@@ -15,6 +15,10 @@ struct KeepFrameView: View {
     @State private var showTrash = false
     @State private var showEndSessionAlert = false
     @State private var isFirstReveal = true
+    @State private var buttonTrigger: SwipeAction? = nil
+    @State private var showButtons = false
+    @State private var stackSpread: CGFloat = 0
+    @State private var dragProgress: CGFloat = 0
 
     var body: some View {
         Group {
@@ -99,31 +103,100 @@ struct KeepFrameView: View {
         VStack(spacing: 32) {
             Spacer()
 
-            SwipeableCardView(photo: photo, nextPhoto: viewModel.nextPhoto, isFirstCard: isFirstReveal) { action in
-                viewModel.perform(action)
-                isFirstReveal = false
+            ZStack {
+                // Stack behind — stable, not destroyed on swipe
+                ForEach(Array(viewModel.nextPhotos.prefix(4).enumerated().reversed()), id: \.element.id) { index, item in
+                    if item.thumbnail != nil {
+                        let depth = CGFloat(index + 1)
+                        let visibleCount = viewModel.nextPhotos.prefix(4).filter { $0.thumbnail != nil }.count
+                        let isFullStack = visibleCount >= 4
+                        let effectiveDepth = max(depth - dragProgress, 0)
+                        // Only the deepest card in a full stack slides out from behind
+                        let isDeepest = Int(depth) == visibleCount && isFullStack
+                        let slideProgress: CGFloat = isDeepest
+                            ? min(dragProgress * 1.5, 1)
+                            : 1.0
+                        let cardDepthForPosition = isDeepest
+                            ? effectiveDepth * slideProgress + CGFloat(visibleCount - 1) * (1 - slideProgress)
+                            : effectiveDepth
+                        let cardOpacity: CGFloat = isDeepest
+                            ? slideProgress
+                            : 1.0
+
+                        PolaroidCard(image: item.thumbnail)
+                            .scaleEffect(1 - cardDepthForPosition * 0.06 * stackSpread)
+                            .offset(y: -cardDepthForPosition * 18 * stackSpread)
+                            .shadow(color: .black.opacity((0.08 + cardDepthForPosition * 0.04) * stackSpread),
+                                    radius: (4 + cardDepthForPosition * 3) * stackSpread,
+                                    x: 0, y: (2 + cardDepthForPosition * 2) * stackSpread)
+                            .opacity(cardOpacity * stackSpread)
+                            .transition(.scale(scale: 0.94).combined(with: .opacity))
+                    }
+                }
+                .animation(.spring(duration: 0.7, bounce: 0.15), value: viewModel.nextPhotos.map(\.id))
+
+                // Top card
+                SwipeableCardView(
+                    photo: photo,
+                    isFirstCard: isFirstReveal,
+                    buttonAction: buttonTrigger,
+                    dragProgress: $dragProgress,
+                    onReady: {
+                        withAnimation(.spring(duration: 0.7, bounce: 0.15)) {
+                            stackSpread = 1
+                        }
+                        withAnimation(.spring(duration: 0.5, bounce: 0.3)) {
+                            showButtons = true
+                        }
+                    },
+                    onSwipe: { action in
+                        buttonTrigger = nil
+                        dragProgress = 0
+                        viewModel.perform(action)
+                        isFirstReveal = false
+                    }
+                )
+                .id(photo.id)
             }
-            .id(photo.id)
             .frame(height: 420)
+            .onAppear {
+                if !isFirstReveal {
+                    stackSpread = 1
+                    showButtons = true
+                }
+            }
 
             HStack(spacing: 40) {
                 ActionButton(icon: "xmark", color: .red) {
                     isFirstReveal = false
-                    viewModel.perform(.delete)
+                    buttonTrigger = .delete
                 }
+                .opacity(showButtons ? 1 : 0)
+                .offset(y: showButtons ? 0 : 20)
+                .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.0), value: showButtons)
+
                 ActionButton(icon: "star.fill", color: .yellow) {
                     isFirstReveal = false
-                    viewModel.perform(.favorite)
+                    buttonTrigger = .favorite
                 }
+                .opacity(showButtons ? 1 : 0)
+                .offset(y: showButtons ? 0 : 20)
+                .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.08), value: showButtons)
+
                 ActionButton(icon: "checkmark", color: .green) {
                     isFirstReveal = false
-                    viewModel.perform(.keep)
+                    buttonTrigger = .keep
                 }
+                .opacity(showButtons ? 1 : 0)
+                .offset(y: showButtons ? 0 : 20)
+                .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.16), value: showButtons)
             }
 
             Text("\(viewModel.remainingCount) zdjęć pozostało")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
+                .opacity(showButtons ? 1 : 0)
+                .animation(.easeOut(duration: 0.3).delay(0.25), value: showButtons)
 
             Spacer()
         }

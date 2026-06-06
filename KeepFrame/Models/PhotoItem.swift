@@ -22,7 +22,7 @@ struct PhotoItem: Identifiable, Hashable {
     func hash(into hasher: inout Hasher) { hasher.combine(id) }
 }
 
-enum SwipeAction {
+enum SwipeAction: Equatable {
     case delete, favorite, keep
 }
 

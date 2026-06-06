@@ -36,6 +36,13 @@ final class PhotoDeckViewModel {
         return photos[currentIndex + 1]
     }
 
+    var nextPhotos: [PhotoItem] {
+        let start = currentIndex + 1
+        let end = min(start + 4, photos.count)
+        guard start < end else { return [] }
+        return Array(photos[start..<end])
+    }
+
     var remainingCount: Int { max(0, photos.count - currentIndex) }
     var trashCount: Int { trashBin.count }
 
@@ -83,7 +90,7 @@ final class PhotoDeckViewModel {
         currentIndex = min(session.currentIndex, photos.count)
         hasActiveSession = true
 
-        for i in currentIndex..<min(currentIndex + 3, photos.count) {
+        for i in currentIndex..<min(currentIndex + 6, photos.count) {
             await loadThumbnail(for: i)
         }
     }
@@ -142,10 +149,11 @@ final class PhotoDeckViewModel {
         activeSession?.currentIndex = currentIndex
         try? modelContext?.save()
 
-        // Preload next 2
+        // Preload next thumbnails for stack
         Task {
-            await loadThumbnail(for: currentIndex)
-            await loadThumbnail(for: currentIndex + 1)
+            for i in currentIndex..<min(currentIndex + 6, photos.count) {
+                await loadThumbnail(for: i)
+            }
         }
     }
 
@@ -217,7 +225,7 @@ final class PhotoDeckViewModel {
         currentIndex = 0
         trashBin = []
 
-        for i in 0..<min(3, photos.count) {
+        for i in 0..<min(6, photos.count) {
             await loadThumbnail(for: i)
         }
     }
@@ -279,7 +287,7 @@ final class PhotoDeckViewModel {
         }
 
         // Preload first 3 thumbnails
-        for i in 0..<min(3, photos.count) {
+        for i in 0..<min(6, photos.count) {
             await loadThumbnail(for: i)
         }
     }
