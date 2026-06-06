@@ -22,30 +22,48 @@ struct TrashBinView: View {
         NavigationStack {
             ZStack(alignment: .bottom) {
                 if viewModel.trashBin.isEmpty {
-                    ContentUnavailableView(
-                        "Koszyk pusty",
-                        systemImage: "trash",
-                        description: Text("Zdjęcia swipe'owane w lewo trafią tutaj")
-                    )
+                    VStack(spacing: 12) {
+                        Image(systemName: "trash")
+                            .font(.system(size: 48))
+                            .foregroundStyle(.white.opacity(0.3))
+                        Text("Koszyk pusty")
+                            .font(.headline)
+                            .foregroundStyle(.white.opacity(0.6))
+                        Text("Zdjęcia swipe'owane w lewo trafią tutaj")
+                            .font(.caption)
+                            .foregroundStyle(.white.opacity(0.4))
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
-                    ScrollView {
-                        LazyVGrid(
-                            columns: [GridItem(.adaptive(minimum: 110), spacing: 3)],
-                            spacing: 3
-                        ) {
-                            ForEach(viewModel.trashBin) { item in
-                                TrashItemCell(
-                                    item: item,
-                                    isSelected: selectedItems.contains(item.id),
-                                    viewModel: viewModel
-                                ) {
-                                    toggleSelection(item.id)
+                    ScrollView(showsIndicators: false) {
+                        VStack(alignment: .leading, spacing: 10) {
+                            LazyVGrid(
+                                columns: [GridItem(.adaptive(minimum: 110), spacing: 3)],
+                                spacing: 3
+                            ) {
+                                ForEach(viewModel.trashBin) { item in
+                                    TrashItemCell(
+                                        item: item,
+                                        isSelected: selectedItems.contains(item.id),
+                                        viewModel: viewModel
+                                    ) {
+                                        toggleSelection(item.id)
+                                    }
                                 }
                             }
                         }
-                        .padding(.horizontal, 3)
-                        .padding(.bottom, 100)
+                        .padding(.horizontal)
+                        .padding(.top, 8)
+                        .safeAreaPadding(.bottom, 120)
                     }
+                    .mask(
+                        VStack(spacing: 0) {
+                            Color.black
+                            LinearGradient(colors: [.black, .clear], startPoint: .top, endPoint: .bottom)
+                                .frame(height: 120)
+                        }
+                        .ignoresSafeArea()
+                    )
                 }
 
                 // Bottom action bar
@@ -53,6 +71,7 @@ struct TrashBinView: View {
                     bottomBar
                 }
             }
+            .background(Color("turq").opacity(0.15).ignoresSafeArea())
             .navigationTitle("Koszyk (\(viewModel.trashCount))")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -166,8 +185,11 @@ private struct TrashItemCell: View {
                             .resizable()
                             .scaledToFill()
                     } else {
-                        Rectangle().fill(.gray.opacity(0.15))
-                            .overlay { ProgressView().tint(Color("turq")) }
+                        Rectangle().fill(Color("turq").opacity(0.08))
+                            .overlay {
+                                Image(systemName: "trash")
+                                    .foregroundStyle(.white.opacity(0.15))
+                            }
                     }
                 }
                 .clipped()
@@ -182,7 +204,16 @@ private struct TrashItemCell: View {
                 .padding(6)
         }
         .overlay(isSelected ? Color("turq").opacity(0.15) : Color.clear)
-        .clipShape(RoundedRectangle(cornerRadius: 6))
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .strokeBorder(.white.opacity(0.15), lineWidth: 0.5)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .strokeBorder(Color("turq"), lineWidth: 1.5)
+        )
+        .glassEffect(.regular, in: .rect(cornerRadius: 8))
         .onTapGesture { onTap() }
         .task { thumbnail = await viewModel.loadTrashThumbnail(for: item) }
     }

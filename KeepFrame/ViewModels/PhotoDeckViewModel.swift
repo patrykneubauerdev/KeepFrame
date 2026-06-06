@@ -164,7 +164,22 @@ final class PhotoDeckViewModel {
         trashBin.removeAll { ids.contains($0.id) }
         activeSession?.deletedIdentifiers.removeAll { ids.contains($0) }
         activeSession?.deletedCount -= photos.count
+
+        // Insert back into deck at current position so user can review again
+        let restoredPhotos = photos.filter { !self.photos[currentIndex...].contains($0) }
+        for (i, photo) in restoredPhotos.enumerated() {
+            self.photos.insert(photo, at: currentIndex + i)
+        }
+        activeSession?.currentIndex = currentIndex
+
         try? modelContext?.save()
+
+        // Preload thumbnails for restored photos
+        Task {
+            for i in currentIndex..<min(currentIndex + 6, self.photos.count) {
+                await loadThumbnail(for: i)
+            }
+        }
     }
 
     func emptyTrash() async throws {

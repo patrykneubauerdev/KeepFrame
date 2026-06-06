@@ -22,6 +22,22 @@ struct SessionDetailView: View {
         NavigationStack {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 24) {
+                    if session.totalReviewed == 0 {
+                        VStack(spacing: 12) {
+                            Image(systemName: "hand.raised")
+                                .font(.system(size: 48))
+                                .foregroundStyle(.white.opacity(0.3))
+                            Text("Brak aktywności")
+                                .font(.headline)
+                                .foregroundStyle(.white.opacity(0.6))
+                            Text("W tej sesji nie przejrzano żadnych zdjęć")
+                                .font(.caption)
+                                .foregroundStyle(.white.opacity(0.4))
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .padding(.top, 100)
+                    }
+
                     if !session.deletedIdentifiers.isEmpty {
                         deletedSection
                     }
@@ -169,6 +185,10 @@ struct SessionDetailView: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .strokeBorder(.white.opacity(0.15), lineWidth: 0.5)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .strokeBorder(Color("turq"), lineWidth: 1.5)
             )
             .glassEffect(isDeleted ? .regular.interactive() : .regular, in: .rect(cornerRadius: 8))
             .onLongPressGesture { if isDeleted { showTutorial = true } }
