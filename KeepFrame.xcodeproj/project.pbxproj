@@ -21,6 +21,7 @@
 		84AB4F312FBA3CB400654C65 /* PolaroidCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB4F262FBA3CB400654C65 /* PolaroidCard.swift */; };
 		84AB4F322FBA3CB400654C65 /* SwipeableCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB4F272FBA3CB400654C65 /* SwipeableCardView.swift */; };
 		84AB4F332FBA3CB400654C65 /* KeepFrameApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB4F2A2FBA3CB400654C65 /* KeepFrameApp.swift */; };
+		8459DE1B2FC1A00A008FF482 /* SessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459DE1A2FC1A00A008FF482 /* SessionDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		84AB4F272FBA3CB400654C65 /* SwipeableCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableCardView.swift; sourceTree = "<group>"; };
 		84AB4F292FBA3CB400654C65 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		84AB4F2A2FBA3CB400654C65 /* KeepFrameApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepFrameApp.swift; sourceTree = "<group>"; };
+		8459DE1A2FC1A00A008FF482 /* SessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +137,7 @@
 			children = (
 				84AB4F252FBA3CB400654C65 /* KeepFrameView.swift */,
 				8459DE142FBE086F008FF482 /* SessionHistoryView.swift */,
+				8459DE1A2FC1A00A008FF482 /* SessionDetailView.swift */,
 				84AB4F272FBA3CB400654C65 /* SwipeableCardView.swift */,
 				8459DE162FBE0B6E008FF482 /* TrashBinView.swift */,
 				8459DE182FBE12BA008FF482 /* WelcomeView.swift */,
@@ -218,6 +221,7 @@
 			isa = PBXSourcesBuildPhase;
 			files = (
 				8459DE152FBE086F008FF482 /* SessionHistoryView.swift in Sources */,
+				8459DE1B2FC1A00A008FF482 /* SessionDetailView.swift in Sources */,
 				84AB4F2D2FBA3CB400654C65 /* PhotoItem.swift in Sources */,
 				8459DE112FBE084B008FF482 /* SessionRecord.swift in Sources */,
 				84AB4F2E2FBA3CB400654C65 /* PhotoDeckViewModel.swift in Sources */,

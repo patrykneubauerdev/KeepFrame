@@ -104,9 +104,10 @@ final class PhotoDeckViewModel {
         guard let session = activeSession, let ctx = modelContext else { return }
         session.isActive = false
         session.endDate = .now
-        // Only subtract photos still in trash (not yet deleted)
         session.deletedCount -= trashBin.count
-        session.deletedIdentifiers = []
+        // Remove only the ones that weren't actually deleted from library
+        let trashIds = Set(trashBin.map(\.id))
+        session.deletedIdentifiers.removeAll { trashIds.contains($0) }
         try? ctx.save()
         activeSession = nil
         hasActiveSession = false
@@ -127,11 +128,14 @@ final class PhotoDeckViewModel {
             trashBin.append(photo)
             activeSession?.deletedCount += 1
             activeSession?.deletedIdentifiers.append(photo.id)
+            // Save thumbnail for history viewing
+            Task { await saveDeletedThumbnail(for: photo) }
         case .favorite:
             activeSession?.favoritedCount += 1
             activeSession?.favoriteIdentifiers.append(photo.id)
         case .keep:
             activeSession?.keptCount += 1
+            activeSession?.keptIdentifiers.append(photo.id)
         }
 
         currentIndex += 1
@@ -158,9 +162,6 @@ final class PhotoDeckViewModel {
     func emptyTrash() async throws {
         let assets = trashBin.map(\.asset)
         try await service.deleteAssets(assets)
-        activeSession?.deletedIdentifiers.removeAll { id in
-            trashBin.contains { $0.id == id }
-        }
         try? modelContext?.save()
         trashBin = []
     }
@@ -234,6 +235,26 @@ final class PhotoDeckViewModel {
 
     func loadTrashThumbnail(for item: PhotoItem) async -> UIImage? {
         await service.loadThumbnail(for: item.asset, size: CGSize(width: 200, height: 200))
+    }
+
+    private func saveDeletedThumbnail(for photo: PhotoItem) async {
+        let image: UIImage?
+        if let existing = photo.thumbnail {
+            image = existing
+        } else {
+            image = await service.loadThumbnail(for: photo.asset, size: CGSize(width: 200, height: 200))
+        }
+        guard let image, let data = image.jpegData(compressionQuality: 0.5) else { return }
+        let dir = Self.deletedThumbnailsDirectory
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        let safe = photo.id.replacingOccurrences(of: "/", with: "_")
+        let url = dir.appendingPathComponent(safe + ".jpg")
+        try? data.write(to: url)
+    }
+
+    static var deletedThumbnailsDirectory: URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("DeletedThumbnails", isDirectory: true)
     }
 
     // MARK: - Private

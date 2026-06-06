@@ -20,6 +20,7 @@ final class SessionRecord {
     var assetIdentifiers: [String]
     var favoriteIdentifiers: [String]
     var deletedIdentifiers: [String] = []
+    var keptIdentifiers: [String] = []
 
     init(startDate: Date = .now) {
         self.startDate = startDate
@@ -32,6 +33,7 @@ final class SessionRecord {
         self.assetIdentifiers = []
         self.favoriteIdentifiers = []
         self.deletedIdentifiers = []
+        self.keptIdentifiers = []
     }
 
     var totalReviewed: Int { deletedCount + keptCount + favoritedCount }

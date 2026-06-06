@@ -13,6 +13,7 @@ struct SessionHistoryView: View {
     @Query(sort: \SessionRecord.startDate, order: .reverse)
     private var sessions: [SessionRecord]
     @State private var appeared = false
+    @State private var selectedSession: SessionRecord?
 
     private var activeSessions: [SessionRecord] {
         sessions.filter { $0.isActive }
@@ -41,7 +42,7 @@ struct SessionHistoryView: View {
             VStack(spacing: 0) {
                 Color.black
                 LinearGradient(colors: [.black, .clear], startPoint: .top, endPoint: .bottom)
-                    .frame(height: 80)
+                    .frame(height: 120)
             }
             .ignoresSafeArea()
         )
@@ -57,6 +58,17 @@ struct SessionHistoryView: View {
             }
         }
         .task { appeared = true }
+        .sheet(item: $selectedSession) { session in
+            SessionDetailView(session: session)
+        }
+    }
+
+    private func tapped(_ session: SessionRecord) {
+        if session.isActive {
+            dismiss()
+        } else {
+            selectedSession = session
+        }
     }
 
     private func sessionSection(title: String, sessions: [SessionRecord], startIndex: Int) -> some View {
@@ -69,6 +81,8 @@ struct SessionHistoryView: View {
 
             ForEach(Array(zip(sessions.indices, sessions)), id: \.1.persistentModelID) { i, session in
                 SessionCard(session: session)
+                    .contentShape(Rectangle())
+                    .onTapGesture { tapped(session) }
                     .opacity(appeared ? 1 : 0)
                     .offset(y: appeared ? 0 : 20)
                     .animation(
@@ -123,6 +137,9 @@ private struct SessionCard: View {
                 Text("\(compactNumber(session.totalReviewed)) przejrzanych")
                     .font(.caption2)
                     .foregroundStyle(.white.opacity(0.5))
+                Image(systemName: "chevron.right")
+                    .font(.caption2)
+                    .foregroundStyle(.white.opacity(0.3))
             }
         }
         .padding(16)
