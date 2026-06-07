@@ -93,15 +93,31 @@ struct KeepFrameView: View {
                 if viewModel.trashCount > 0 {
                     Text("\(viewModel.trashCount)")
                         .font(.caption2.bold())
+                        .monospacedDigit()
                         .foregroundStyle(.white)
-                        .padding(.horizontal, 6)
+                        .frame(minWidth: badgeWidth)
+                        .padding(.horizontal, 4)
                         .padding(.vertical, 2)
-                        .frame(minWidth: 22)
-                        .background(.red, in: Capsule())
+                        .background(Color("turq").opacity(0.7), in: Capsule())
+                        .glassEffect(.regular, in: .capsule)
+                        .transition(.scale.combined(with: .opacity))
+                        .animation(.easeInOut(duration: 0.25), value: trashDigitCount)
                 }
             }
             .foregroundStyle(.white)
-            .animation(.easeInOut(duration: 0.2), value: viewModel.trashCount)
+            .animation(.easeInOut(duration: 0.25), value: viewModel.trashCount > 0)
+        }
+    }
+
+    private var trashDigitCount: Int { String(viewModel.trashCount).count }
+    private var badgeWidth: CGFloat {
+        switch trashDigitCount {
+        case 1: return 18
+        case 2: return 24
+        case 3: return 32
+        case 4: return 40
+        case 5: return 48
+        default: return 56
         }
     }
 
@@ -109,7 +125,7 @@ struct KeepFrameView: View {
 
     private func deckView(photo: PhotoItem) -> some View {
         VStack(spacing: 20) {
-            Spacer()
+            Spacer(minLength: 40)
 
             ZStack {
                 // Stack behind — stable, not destroyed on swipe
@@ -201,41 +217,45 @@ struct KeepFrameView: View {
             }
 
             VStack(spacing: 8) {
-                HStack(spacing: 16) {
-                    statLabel(icon: "trash", value: viewModel.activeSession?.deletedCount ?? 0, color: .red)
+                HStack(spacing: 20) {
+                    statLabel(icon: "trash.fill", value: viewModel.activeSession?.deletedCount ?? 0, color: .red)
                     statLabel(icon: "star.fill", value: viewModel.activeSession?.favoritedCount ?? 0, color: .yellow)
                     statLabel(icon: "checkmark", value: viewModel.activeSession?.keptCount ?? 0, color: .green)
                 }
-                .padding(.horizontal, 28)
+                .frame(width: 240)
                 .padding(.vertical, 12)
                 .glassEffect(.regular, in: .capsule)
 
-                HStack(spacing: 4) {
+                HStack(spacing: 6) {
                     Image(systemName: "photo.stack")
                         .font(.caption)
                         .foregroundStyle(.white.opacity(0.7))
-                    Text("\(100000) pozostało")
+                    Text(verbatim: "\(viewModel.remainingCount) pozostało")
                         .font(.subheadline.bold())
+                        .monospacedDigit()
                         .foregroundStyle(.white)
                 }
-                .frame(minWidth: 160)
-                .padding(.horizontal, 20)
+                .frame(width: 200)
                 .padding(.vertical, 10)
                 .glassEffect(.regular, in: .capsule)
             }
             .opacity(showButtons ? 1 : 0)
             .animation(.easeOut(duration: 0.3).delay(0.25), value: showButtons)
 
-            Button { showEndSessionAlert = true } label: {
+            Button {
+                showEndSessionAlert = true
+            } label: {
                 Text("Zakończ sesję")
                     .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.red)
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 10)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
             }
-            .glassEffect(.regular, in: .capsule)
+            .tint(.turq)
+            .buttonStyle(.borderedProminent)
+            .glassEffect(.regular.interactive())
+            .padding(.horizontal, 35)
             .opacity(showButtons ? 1 : 0)
-            .animation(.easeOut(duration: 0.3).delay(0.35), value: showButtons)
+            .animation(.easeOut(duration: 0.3).delay(0.25), value: showButtons)
 
             Spacer()
         }
@@ -267,14 +287,17 @@ struct KeepFrameView: View {
             Image(systemName: icon)
                 .font(.caption)
                 .foregroundStyle(.white.opacity(0.7))
+                .frame(width: 16)
             Text(compactNumber(value))
                 .font(.subheadline.bold())
+                .monospacedDigit()
                 .foregroundStyle(.white)
-                .frame(minWidth: 28)
+                .frame(minWidth: 32)
         }
     }
 
     private func compactNumber(_ value: Int) -> String {
+        if value >= 1_000_000 { return String(format: "%.1fm", Double(value) / 1_000_000) }
         if value >= 100_000 { return "\(value / 1000)k" }
         if value >= 10_000 { return String(format: "%.1fk", Double(value) / 1000) }
         return "\(value)"
