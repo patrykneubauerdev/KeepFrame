@@ -22,7 +22,16 @@ struct KeepFrameView: View {
 
     var body: some View {
         ZStack {
-            Color("turq").opacity(0.7).ignoresSafeArea()
+            ZStack {
+                Color(.turq)
+                RadialGradient(
+                    colors: [.clear, Color(.turqDark)],
+                    center: .center,
+                    startRadius: 100,
+                    endRadius: 400
+                )
+            }
+            .ignoresSafeArea()
 
             if viewModel.authorizationDenied {
                 deniedView
@@ -98,7 +107,7 @@ struct KeepFrameView: View {
                         .frame(minWidth: badgeWidth)
                         .padding(.horizontal, 4)
                         .padding(.vertical, 2)
-                        .background(Color("turq").opacity(0.7), in: Capsule())
+                        .background(Color(.turqLight).opacity(0.8), in: Capsule())
                         .glassEffect(.regular, in: .capsule)
                         .transition(.scale.combined(with: .opacity))
                         .animation(.easeInOut(duration: 0.25), value: trashDigitCount)

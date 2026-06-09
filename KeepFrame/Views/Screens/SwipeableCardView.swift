@@ -35,16 +35,16 @@ struct SwipeableCardView: View {
 
     var body: some View {
         ZStack {
-            CardBack()
-                .opacity(showFront ? 0 : 1)
-
-            PolaroidCard(image: showImage ? photo.thumbnail : nil)
-                .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
-                .opacity(showFront ? 1 : 0)
-                .overlay {
-                    swipeLabel
-                        .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
-                }
+            if !showFront {
+                CardBack()
+            } else {
+                PolaroidCard(image: showImage ? photo.thumbnail : nil)
+                    .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+                    .overlay {
+                        swipeLabel
+                            .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+                    }
+            }
         }
         .rotation3DEffect(.degrees(flipAngle), axis: (x: 0, y: 1, z: 0), perspective: 0.5)
         .offset(x: offset.width, y: offset.height + slideOffset)
@@ -119,7 +119,7 @@ struct SwipeableCardView: View {
                 flipAngle = 180
             }
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.95) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.97) {
             showFront = true
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {

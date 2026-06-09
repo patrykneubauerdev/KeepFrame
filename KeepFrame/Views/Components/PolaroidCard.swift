@@ -20,36 +20,141 @@ struct PolaroidCard: View {
                         .scaledToFill()
                         .transition(.opacity)
                 }
+                // Inner shadow on photo edges (3D inset effect)
+                VStack {
+                    LinearGradient(colors: [.black.opacity(0.12), .clear], startPoint: .top, endPoint: .bottom).frame(height: 6)
+                    Spacer()
+                }
+                VStack {
+                    Spacer()
+                    LinearGradient(colors: [.black.opacity(0.12), .clear], startPoint: .bottom, endPoint: .top).frame(height: 6)
+                }
+                HStack {
+                    LinearGradient(colors: [.black.opacity(0.08), .clear], startPoint: .leading, endPoint: .trailing).frame(width: 6)
+                    Spacer()
+                }
+                HStack {
+                    Spacer()
+                    LinearGradient(colors: [.black.opacity(0.08), .clear], startPoint: .trailing, endPoint: .leading).frame(width: 6)
+                }
             }
-            .frame(width: 280, height: 340)
+            .frame(width: 300, height: 300)
             .clipped()
-            .padding(.top, 16)
-            .padding(.horizontal, 16)
+            .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 0)
+            .padding(.top, 20)
+            .padding(.horizontal, 20)
 
             Spacer()
-                .frame(height: 40)
+                .frame(height: 60)
         }
-        .background(.white)
+        .background(
+            LinearGradient(
+                colors: [Color(white: 0.98), Color(white: 0.91)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
+        .overlay(borderVignette)
         .clipShape(Rectangle())
-        .shadow(color: .black.opacity(0.15), radius: 10, x: 0, y: 4)
+        .shadow(color: .black.opacity(0.2), radius: 12, x: 0, y: 6)
+    }
+
+    private var borderVignette: some View {
+        ZStack {
+            VStack {
+                Rectangle().fill(LinearGradient(colors: [.black.opacity(0.1), .clear], startPoint: .top, endPoint: .bottom)).frame(height: 12)
+                Spacer()
+            }
+            VStack {
+                Spacer()
+                Rectangle().fill(LinearGradient(colors: [.black.opacity(0.12), .clear], startPoint: .bottom, endPoint: .top)).frame(height: 30)
+            }
+            HStack {
+                Rectangle().fill(LinearGradient(colors: [.black.opacity(0.08), .clear], startPoint: .leading, endPoint: .trailing)).frame(width: 12)
+                Spacer()
+            }
+            HStack {
+                Spacer()
+                Rectangle().fill(LinearGradient(colors: [.black.opacity(0.08), .clear], startPoint: .trailing, endPoint: .leading)).frame(width: 12)
+            }
+        }
     }
 }
 
 struct CardBack: View {
+    @State private var shimmerOffset: CGFloat = -400
+
     var body: some View {
-        VStack {
-            Image("iconKFturq")
+        ZStack {
+            // White/gray border frame
+            LinearGradient(
+                colors: [Color(white: 0.98), Color(white: 0.91)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+
+            // Turq center with vignette
+            ZStack {
+                Color("turq")
+                RadialGradient(
+                    colors: [.clear, Color("turqDark").opacity(0.7)],
+                    center: .center,
+                    startRadius: 30,
+                    endRadius: 160
+                )
+            }
+            .frame(width: 300, height: 340)
+
+            // Logo
+            Image("iconKF")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 120, height: 120)
+                .frame(width: 150, height: 150)
+
+            // Diagonal shimmer
+            Rectangle()
+                .fill(
+                    LinearGradient(
+                        colors: [.clear, .white.opacity(0.35), .white.opacity(0.5), .white.opacity(0.35), .clear],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .frame(width: 80, height: 600)
+                .rotationEffect(.degrees(25))
+                .offset(x: shimmerOffset)
         }
-        .frame(width: 312, height: 396)
-        .background(.white)
-        .clipShape(RoundedRectangle(cornerRadius: 4))
-        .overlay(
-            RoundedRectangle(cornerSize: .zero)
-                .stroke(Color("turq"), lineWidth: 12)
-        )
-        .shadow(color: .black.opacity(0.15), radius: 10, x: 0, y: 4)
+        .frame(width: 340, height: 380)
+        .overlay(cardBackBorderVignette)
+        .clipShape(Rectangle())
+        .shadow(color: .black.opacity(0.2), radius: 12, x: 0, y: 6)
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                withAnimation(.easeInOut(duration: 0.5)) {
+                    shimmerOffset = 400
+                }
+            }
+        }
+    }
+
+    private var cardBackBorderVignette: some View {
+        ZStack {
+            VStack {
+                Rectangle().fill(LinearGradient(colors: [.black.opacity(0.1), .clear], startPoint: .top, endPoint: .bottom)).frame(height: 12)
+                Spacer()
+            }
+            VStack {
+                Spacer()
+                Rectangle().fill(LinearGradient(colors: [.black.opacity(0.1), .clear], startPoint: .bottom, endPoint: .top)).frame(height: 12)
+            }
+            HStack {
+                Rectangle().fill(LinearGradient(colors: [.black.opacity(0.08), .clear], startPoint: .leading, endPoint: .trailing)).frame(width: 12)
+                Spacer()
+            }
+            HStack {
+                Spacer()
+                Rectangle().fill(LinearGradient(colors: [.black.opacity(0.08), .clear], startPoint: .trailing, endPoint: .leading)).frame(width: 12)
+            }
+        }
     }
 }
