@@ -19,6 +19,7 @@ struct KeepFrameView: View {
     @State private var showButtons = false
     @State private var stackSpread: CGFloat = 0
     @State private var dragProgress: CGFloat = 0
+    @State private var buttonCooldown = false
 
     var body: some View {
         ZStack {
@@ -92,6 +93,16 @@ struct KeepFrameView: View {
     }
 
     // MARK: - Trash Button (custom badge)
+
+    private func triggerAction(_ action: SwipeAction) {
+        guard !buttonCooldown else { return }
+        buttonCooldown = true
+        isFirstReveal = false
+        buttonTrigger = action
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            buttonCooldown = false
+        }
+    }
 
     private var trashButton: some View {
         Button { showTrash = true } label: {
@@ -201,24 +212,21 @@ struct KeepFrameView: View {
 
             HStack(spacing: 40) {
                 ActionButton(icon: "xmark", color: .red) {
-                    isFirstReveal = false
-                    buttonTrigger = .delete
+                    triggerAction(.delete)
                 }
                 .opacity(showButtons ? 1 : 0)
                 .offset(y: showButtons ? 0 : 20)
                 .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.0), value: showButtons)
 
                 ActionButton(icon: "star.fill", color: .yellow) {
-                    isFirstReveal = false
-                    buttonTrigger = .favorite
+                    triggerAction(.favorite)
                 }
                 .opacity(showButtons ? 1 : 0)
                 .offset(y: showButtons ? 0 : 20)
                 .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.08), value: showButtons)
 
                 ActionButton(icon: "checkmark", color: .green) {
-                    isFirstReveal = false
-                    buttonTrigger = .keep
+                    triggerAction(.keep)
                 }
                 .opacity(showButtons ? 1 : 0)
                 .offset(y: showButtons ? 0 : 20)
