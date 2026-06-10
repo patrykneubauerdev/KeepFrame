@@ -14,6 +14,7 @@ final class PhotoDeckViewModel {
     private(set) var photos: [PhotoItem] = []
     private(set) var currentIndex: Int = 0
     private(set) var isLoading = false
+    private(set) var isSessionChecked = false
     private(set) var authorizationDenied = false
     private(set) var trashBin: [PhotoItem] = []
     var trashSelection: Set<String>?
@@ -308,12 +309,18 @@ final class PhotoDeckViewModel {
     }
 
     private func loadSession() async {
-        guard let ctx = modelContext else { return }
+        guard let ctx = modelContext else {
+            isSessionChecked = true
+            return
+        }
         let descriptor = FetchDescriptor<SessionRecord>(
             predicate: #Predicate { $0.isActive },
             sortBy: [SortDescriptor(\.startDate, order: .reverse)]
         )
-        guard let activeSessions = try? ctx.fetch(descriptor), let newest = activeSessions.first else { return }
+        guard let activeSessions = try? ctx.fetch(descriptor), let newest = activeSessions.first else {
+            isSessionChecked = true
+            return
+        }
         // Deactivate duplicates, keep only the newest
         for s in activeSessions.dropFirst() {
             s.isActive = false
@@ -322,5 +329,6 @@ final class PhotoDeckViewModel {
         try? ctx.save()
         activeSession = newest
         await resumeSession()
+        isSessionChecked = true
     }
 }
