@@ -14,7 +14,9 @@ struct KeepFrameView: View {
     @State private var showHistory = false
     @State private var showTrash = false
     @State private var showEndSessionAlert = false
+    @State private var showTutorial = false
     @State private var isFirstReveal = true
+    @AppStorage("hasSeenSwipeTutorial") private var hasSeenSwipeTutorial = false
     @State private var buttonTrigger: SwipeAction? = nil
     @State private var showButtons = false
     @State private var stackSpread: CGFloat = 0
@@ -57,12 +59,24 @@ struct KeepFrameView: View {
                     .foregroundStyle(.white)
                 }
             }
+            ToolbarSpacer(.fixed, placement: .topBarLeading)
+            ToolbarItem(placement: .topBarLeading) {
+                Button { showTutorial = true } label: {
+                    Image(systemName: "info.circle")
+                        .foregroundStyle(.white)
+                }
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 trashButton
             }
         }
         .sheet(isPresented: $showHistory) {
             NavigationStack { SessionHistoryView() }
+        }
+        .sheet(isPresented: $showTutorial) {
+            SwipeTutorialView()
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
         }
         .sheet(isPresented: $showTrash) {
             TrashBinView(viewModel: viewModel)
@@ -89,7 +103,15 @@ struct KeepFrameView: View {
                 Text("Sesja zostanie zapisana w historii.")
             }
         }
-        .onAppear { viewModel.setup(modelContext: modelContext) }
+        .onAppear {
+            viewModel.setup(modelContext: modelContext)
+            if !hasSeenSwipeTutorial {
+                hasSeenSwipeTutorial = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                    showTutorial = true
+                }
+            }
+        }
     }
 
     // MARK: - Trash Button (custom badge)
@@ -334,5 +356,101 @@ struct KeepFrameView: View {
                 .multilineTextAlignment(.center)
         }
         .padding()
+    }
+}
+
+
+// MARK: - Swipe Tutorial
+
+struct SwipeTutorialView: View {
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 16) {
+                Image(systemName: "hand.draw")
+                    .font(.system(size: 24))
+                    .foregroundStyle(Color("turq"))
+                    .symbolEffect(.pulse, options: .repeating)
+
+                Text("Przeglądanie zdjęć")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+
+                VStack(spacing: 12) {
+                    tutorialRow(
+                        icon: "arrow.left",
+                        color: .red,
+                        title: "Swipe w lewo",
+                        description: "Zdjęcie trafia do koszyka. Możesz je później przywrócić lub usunąć na stałe."
+                    )
+
+                    tutorialRow(
+                        icon: "arrow.right",
+                        color: .green,
+                        title: "Swipe w prawo",
+                        description: "Zdjęcie zostaje zachowane w galerii bez zmian."
+                    )
+
+                    tutorialRow(
+                        icon: "arrow.up",
+                        color: .yellow,
+                        title: "Swipe w górę",
+                        description: "Zdjęcie zostaje oznaczone jako ulubiona."
+                    )
+                }
+                .padding(.horizontal, 24)
+
+                Text("Możesz też korzystać z przycisków pod kartą")
+                    .font(.caption)
+                    .foregroundStyle(.white.opacity(0.4))
+                    .multilineTextAlignment(.center)
+
+                Button { dismiss() } label: {
+                    Text("**Rozumiem**")
+                        .font(.subheadline)
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 14)
+                }
+                .tint(Color("turq"))
+                .buttonStyle(.borderedProminent)
+                .glassEffect(.regular.interactive())
+            }
+            .padding(.horizontal, 24)
+            .padding(.vertical, 16)
+            .background(Color("turq").opacity(0.15).ignoresSafeArea())
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button { dismiss() } label: {
+                        Image(systemName: "xmark")
+                            .font(.footnote.weight(.bold))
+                            .foregroundStyle(.white)
+                    }
+                }
+            }
+        }
+    }
+
+    private func tutorialRow(icon: String, color: Color, title: String, description: String) -> some View {
+        HStack(spacing: 14) {
+            Image(systemName: icon)
+                .font(.title2.weight(.bold))
+                .foregroundStyle(color)
+                .frame(width: 44, height: 44)
+                .background(color.opacity(0.15), in: Circle())
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(title)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.white)
+                Text(description)
+                    .font(.caption)
+                    .foregroundStyle(.white.opacity(0.6))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Spacer(minLength: 0)
+        }
     }
 }

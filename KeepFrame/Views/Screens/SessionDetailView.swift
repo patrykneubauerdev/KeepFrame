@@ -269,8 +269,9 @@ private struct RestoreTutorialView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
                 }
-                .buttonStyle(.borderedProminent)
                 .tint(Color("turq"))
+                .buttonStyle(.borderedProminent)
+                .glassEffect(.regular.interactive())
             }
             .padding(24)
             .background(Color("turq").opacity(0.15).ignoresSafeArea())

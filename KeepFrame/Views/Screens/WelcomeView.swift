@@ -12,111 +12,299 @@ struct WelcomeView: View {
     @Bindable var viewModel: PhotoDeckViewModel
     @State private var years: [Int] = []
     @State private var isLoadingYears = true
-    @State private var favoritesSelected = false
+    @State private var sourceMode: SourceMode = .all
+    @State private var selectedYear: Int = 2025
+    @State private var showInfo = false
+    @State private var appeared = false
     let onStart: () -> Void
 
     private let service = PhotoLibraryService.shared
 
+    enum SourceMode: String, CaseIterable {
+        case all = "Wszystkie"
+        case favorites = "Ulubione"
+        case year = "Rok"
+    }
+
     var body: some View {
-        VStack(spacing: 24) {
-            Spacer()
+        ZStack {
+            Color("turq").ignoresSafeArea()
+            RadialGradient(
+                colors: [.clear, Color("turqDark").opacity(0.8)],
+                center: .center,
+                startRadius: 100,
+                endRadius: 350
+            )
+            .ignoresSafeArea()
 
-            Image("iconKFturq")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 100, height: 100)
+            VStack(spacing: 0) {
+                // Fixed logo at top
+                Image("iconKF")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 120, height: 120)
+                    .padding(.top, 50)
+                    .padding(.bottom, 50)
+                    .opacity(appeared ? 1 : 0)
+                    .scaleEffect(appeared ? 1 : 0.8)
+                    .animation(.spring(duration: 0.5, bounce: 0.3), value: appeared)
 
-            Text("KeepFrame")
-                .font(.largeTitle.bold())
-
-            Text("Wybierz rok i zacznij porządkować zdjęcia")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-
-            if isLoadingYears {
-                ProgressView()
-            } else {
-                yearPicker
-            }
-
-            sortPicker
-
-            Spacer()
-
-            Button {
-                if favoritesSelected {
-                    Task { await viewModel.startFavoritesSession() }
+                if isLoadingYears {
+                    Spacer()
+                    SpinnerView()
+                        .offset(y: -34)
+                    Spacer()
                 } else {
-                    onStart()
+                    Spacer().frame(height: 4)
+
+                    // Content
+                    VStack(spacing: 50) {
+                        // Section: Źródło
+                        VStack(alignment: .leading, spacing: 14) {
+                            sectionHeader("Zakres zdjęć", icon: "photo.on.rectangle.angled")
+
+                            HStack(spacing: 10) {
+                                tileButton("Wszystkie", icon: "photo.stack", selected: sourceMode == .all) {
+                                    sourceMode = .all
+                                }
+                                tileButton("Ulubione", icon: "star.fill", selected: sourceMode == .favorites) {
+                                    sourceMode = .favorites
+                                }
+                                yearMenuButton
+                            }
+                        }
+                        .opacity(appeared ? 1 : 0)
+                        .offset(y: appeared ? 0 : 20)
+                        .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.1), value: appeared)
+
+                        // Section: Kolejność
+                        VStack(alignment: .leading, spacing: 14) {
+                            sectionHeader("Kolejność wyświetlania", icon: "arrow.up.arrow.down")
+
+                            HStack(spacing: 10) {
+                                tileButton("Najnowsze", icon: "arrow.down", selected: viewModel.sortOrder == .newest) {
+                                    viewModel.sortOrder = .newest
+                                }
+                                tileButton("Najstarsze", icon: "arrow.up", selected: viewModel.sortOrder == .oldest) {
+                                    viewModel.sortOrder = .oldest
+                                }
+                                tileButton("Losowe", icon: "shuffle", selected: viewModel.sortOrder == .random) {
+                                    viewModel.sortOrder = .random
+                                }
+                            }
+                        }
+                        .opacity(appeared ? 1 : 0)
+                        .offset(y: appeared ? 0 : 20)
+                        .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.2), value: appeared)
+                    }
+                    .padding(.horizontal, 20)
+
+                    Spacer()
                 }
-            } label: {
-                Label("Rozpocznij", systemImage: "play.fill")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding()
+
+                // Fixed button at bottom
+                Button {
+                    applySource()
+                    if sourceMode == .favorites {
+                        Task { await viewModel.startFavoritesSession() }
+                    } else {
+                        onStart()
+                    }
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "play.fill")
+                        Text("Rozpocznij sesję")
+                            .font(.headline)
+                    }
+                    .foregroundStyle(.white)
+                    .frame(width: 240)
+                    .padding(.vertical, 16)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(Color("turqLight"))
+                .glassEffect(.regular.interactive())
+                .padding(.bottom, 30)
+                .opacity(appeared ? 1 : 0)
+                .offset(y: appeared ? 0 : 20)
+                .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.3), value: appeared)
             }
-            .buttonStyle(.borderedProminent)
-            .padding(.horizontal, 32)
-            .padding(.bottom, 32)
+
+            // Info button
+            VStack {
+                HStack {
+                    Spacer()
+                    Button { showInfo = true } label: {
+                        Image(systemName: "info.circle")
+                            .font(.body.weight(.semibold))
+                            .foregroundStyle(.white)
+                            .padding(10)
+                            .glassEffect(.regular.interactive(), in: .circle)
+                    }
+                    .padding(.trailing, 20)
+                    .padding(.top, 56)
+                    .opacity(appeared ? 1 : 0)
+                    .animation(.easeOut(duration: 0.4).delay(0.35), value: appeared)
+                }
+                Spacer()
+            }
+        }
+        .navigationBarHidden(true)
+        .animation(.easeInOut(duration: 0.25), value: sourceMode)
+        .sheet(isPresented: $showInfo) {
+            infoSheet
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
         }
         .task {
             let status = await service.requestAuthorization()
             guard status == .authorized || status == .limited else { return }
             years = service.availableYears()
+            if let first = years.first { selectedYear = first }
             isLoadingYears = false
+            try? await Task.sleep(for: .milliseconds(50))
+            appeared = true
         }
     }
 
-    private var yearPicker: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 10) {
-                // Ulubione
-                Button {
-                    favoritesSelected = true
-                    viewModel.selectedYear = nil
-                } label: {
-                    Label("Ulubione", systemImage: "star.fill")
-                        .font(.subheadline.weight(.medium))
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(favoritesSelected ? Color.yellow : Color.gray.opacity(0.15))
-                        .foregroundStyle(favoritesSelected ? .white : .primary)
-                        .clipShape(Capsule())
+    // MARK: - Info Sheet
+
+    private var infoSheet: some View {
+        NavigationStack {
+            VStack(alignment: .leading, spacing: 32) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Label("Zakres zdjęć", systemImage: "photo.on.rectangle.angled")
+                        .font(.headline)
+                    Text("Wybierz zakres zdjęć do przeglądania: wszystkie z galerii, tylko ulubione, lub z wybranego roku.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
 
-                // Wszystkie
-                yearChip(label: "Wszystkie", year: nil)
+                VStack(alignment: .leading, spacing: 8) {
+                    Label("Kolejność wyświetlania", systemImage: "arrow.up.arrow.down")
+                        .font(.headline)
+                    Text("Zdecyduj w jakiej kolejności będą pokazywane zdjęcia: od najnowszych, najstarszych, lub w losowej kolejności.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
 
+                Spacer()
+            }
+            .padding(24)
+            .navigationTitle("Informacje")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button { showInfo = false } label: {
+                        Image(systemName: "xmark")
+                            .font(.footnote.weight(.bold))
+                            .foregroundStyle(.white)
+                    }
+                }
+            }
+        }
+    }
+
+    // MARK: - Components
+
+    private func sectionHeader(_ title: String, icon: String) -> some View {
+        VStack(spacing: 6) {
+            Image(systemName: icon)
+                .font(.title3.weight(.bold))
+                .foregroundStyle(.white)
+            Text(title)
+                .font(.caption.weight(.bold))
+                .foregroundStyle(.white)
+                .textCase(.uppercase)
+                .tracking(1)
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    private func tileButton(_ label: String, icon: String, selected: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            VStack(spacing: 6) {
+                Image(systemName: icon)
+                    .font(.body)
+                Text(label)
+                    .font(.caption.weight(.semibold))
+            }
+            .foregroundStyle(selected ? .white : .white.opacity(0.4))
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 22)
+            .background(selected ? Color("turqLight").opacity(0.4) : Color.white.opacity(0.03))
+            .overlay(
+                RoundedRectangle(cornerRadius: 14)
+                    .strokeBorder(selected ? Color("turqLight") : .white.opacity(0.1), lineWidth: selected ? 2 : 0.5)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .glassEffect(selected ? .regular.interactive() : .regular, in: .rect(cornerRadius: 14))
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var yearMenuButton: some View {
+        let isSelected = sourceMode == .year
+        return Menu {
+            Picker("Rok", selection: Binding(
+                get: { selectedYear },
+                set: { selectedYear = $0; sourceMode = .year }
+            )) {
                 ForEach(years, id: \.self) { year in
-                    yearChip(label: "\(year)", year: year)
+                    Text(verbatim: "\(year)").tag(year)
                 }
             }
-            .padding(.horizontal)
-        }
-    }
-
-    private func yearChip(label: String, year: Int?) -> some View {
-        Button {
-            favoritesSelected = false
-            viewModel.selectedYear = year
         } label: {
-            Text(label)
-                .font(.subheadline.weight(.medium))
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
-                .background(!favoritesSelected && viewModel.selectedYear == year ? Color.accentColor : Color.gray.opacity(0.15))
-                .foregroundStyle(!favoritesSelected && viewModel.selectedYear == year ? .white : .primary)
-                .clipShape(Capsule())
+            VStack(spacing: 6) {
+                Image(systemName: "calendar")
+                    .font(.body)
+                Text(verbatim: isSelected ? "\(selectedYear)" : "Rok")
+                    .font(.caption.weight(.semibold))
+            }
+            .foregroundStyle(isSelected ? .white : .white.opacity(0.4))
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 22)
+            .background(isSelected ? Color("turqLight").opacity(0.4) : Color.white.opacity(0.03))
+            .overlay(
+                RoundedRectangle(cornerRadius: 14)
+                    .strokeBorder(isSelected ? Color("turqLight") : .white.opacity(0.1), lineWidth: isSelected ? 2 : 0.5)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .glassEffect(isSelected ? .regular.interactive() : .regular, in: .rect(cornerRadius: 14))
         }
     }
 
-    private var sortPicker: some View {
-        Picker("Kolejność", selection: $viewModel.sortOrder) {
-            ForEach(PhotoSortOrder.allCases, id: \.self) { order in
-                Text(order.rawValue).tag(order)
-            }
+    private func applySource() {
+        switch sourceMode {
+        case .all: viewModel.selectedYear = nil
+        case .favorites: viewModel.selectedYear = nil
+        case .year: viewModel.selectedYear = selectedYear
         }
-        .pickerStyle(.segmented)
-        .padding(.horizontal, 32)
+    }
+}
+
+
+private struct SpinnerView: View {
+    @State private var rotation: Double = 0
+
+    var body: some View {
+        VStack(spacing: 24) {
+            Image("iconKF")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 170, height: 170)
+
+            Circle()
+                .trim(from: 0, to: 0.7)
+                .stroke(Color.white.opacity(0.8), style: StrokeStyle(lineWidth: 3, lineCap: .round))
+                .frame(width: 32, height: 32)
+                .rotationEffect(.degrees(rotation))
+                .onAppear {
+                    withAnimation(.linear(duration: 1).repeatForever(autoreverses: false)) {
+                        rotation = 360
+                    }
+                }
+        }
     }
 }
