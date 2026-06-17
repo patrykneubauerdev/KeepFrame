@@ -61,13 +61,13 @@ struct WelcomeView: View {
                     VStack(spacing: 50) {
                         // Section: Źródło
                         VStack(alignment: .leading, spacing: 14) {
-                            sectionHeader("Zakres zdjęć", icon: "photo.on.rectangle.angled")
+                            sectionHeader(String(localized: "photo_scope"), icon: "photo.on.rectangle.angled")
 
                             HStack(spacing: 10) {
-                                tileButton("Wszystkie", icon: "photo.stack", selected: sourceMode == .all) {
+                                tileButton(String(localized: "all_photos"), icon: "photo.stack", selected: sourceMode == .all) {
                                     sourceMode = .all
                                 }
-                                tileButton("Ulubione", icon: "star.fill", selected: sourceMode == .favorites) {
+                                tileButton(String(localized: "favorites"), icon: "star.fill", selected: sourceMode == .favorites) {
                                     sourceMode = .favorites
                                 }
                                 yearMenuButton
@@ -79,16 +79,16 @@ struct WelcomeView: View {
 
                         // Section: Kolejność
                         VStack(alignment: .leading, spacing: 14) {
-                            sectionHeader("Kolejność wyświetlania", icon: "arrow.up.arrow.down")
+                            sectionHeader(String(localized: "display_order"), icon: "arrow.up.arrow.down")
 
                             HStack(spacing: 10) {
-                                tileButton("Najnowsze", icon: "arrow.down", selected: viewModel.sortOrder == .newest) {
+                                tileButton(String(localized: "newest"), icon: "arrow.down", selected: viewModel.sortOrder == .newest) {
                                     viewModel.sortOrder = .newest
                                 }
-                                tileButton("Najstarsze", icon: "arrow.up", selected: viewModel.sortOrder == .oldest) {
+                                tileButton(String(localized: "oldest"), icon: "arrow.up", selected: viewModel.sortOrder == .oldest) {
                                     viewModel.sortOrder = .oldest
                                 }
-                                tileButton("Losowe", icon: "shuffle", selected: viewModel.sortOrder == .random) {
+                                tileButton(String(localized: "random"), icon: "shuffle", selected: viewModel.sortOrder == .random) {
                                     viewModel.sortOrder = .random
                                 }
                             }
@@ -113,7 +113,7 @@ struct WelcomeView: View {
                 } label: {
                     HStack(spacing: 8) {
                         Image(systemName: "play.fill")
-                        Text("Rozpocznij sesję")
+                        Text("start_session")
                             .font(.headline)
                     }
                     .foregroundStyle(.white)
@@ -172,18 +172,18 @@ struct WelcomeView: View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 32) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Label("Zakres zdjęć", systemImage: "photo.on.rectangle.angled")
+                    Label("photo_scope", systemImage: "photo.on.rectangle.angled")
                         .font(.headline)
-                    Text("Wybierz zakres zdjęć do przeglądania: wszystkie z galerii, tylko ulubione, lub z wybranego roku.")
+                    Text("photo_scope_description")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
 
                 VStack(alignment: .leading, spacing: 8) {
-                    Label("Kolejność wyświetlania", systemImage: "arrow.up.arrow.down")
+                    Label("display_order", systemImage: "arrow.up.arrow.down")
                         .font(.headline)
-                    Text("Zdecyduj w jakiej kolejności będą pokazywane zdjęcia: od najnowszych, najstarszych, lub w losowej kolejności.")
+                    Text("display_order_description")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -192,7 +192,7 @@ struct WelcomeView: View {
                 Spacer()
             }
             .padding(24)
-            .navigationTitle("Informacje")
+            .navigationTitle(Text("info"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -247,7 +247,7 @@ struct WelcomeView: View {
     private var yearMenuButton: some View {
         let isSelected = sourceMode == .year
         return Menu {
-            Picker("Rok", selection: Binding(
+            Picker(String(localized: "year"), selection: Binding(
                 get: { selectedYear },
                 set: { selectedYear = $0; sourceMode = .year }
             )) {
@@ -259,7 +259,7 @@ struct WelcomeView: View {
             VStack(spacing: 6) {
                 Image(systemName: "calendar")
                     .font(.body)
-                Text(verbatim: isSelected ? "\(selectedYear)" : "Rok")
+                Text(verbatim: isSelected ? "\(selectedYear)" : String(localized: "year"))
                     .font(.caption.weight(.semibold))
             }
             .foregroundStyle(isSelected ? .white : .white.opacity(0.4))

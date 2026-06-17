@@ -137,15 +137,15 @@ struct SwipeableCardView: View {
     private var swipeLabel: some View {
         let progress = max(0, min((dragMagnitude - 68) / 120, 1))
         ZStack {
-            stampView(text: "USUNĄĆ", color: .red, angle: -15)
+            stampView(text: String(localized: "stamp_delete"), color: .red, angle: -15)
                 .opacity(offset.width < -55 ? progress : 0)
                 .offset(x: 30, y: -80)
 
-            stampView(text: "ZACHOWAĆ", color: .green, angle: -15)
+            stampView(text: String(localized: "stamp_keep"), color: .green, angle: -15)
                 .opacity(offset.width > 55 ? progress : 0)
                 .offset(x: -15, y: -80)
 
-            stampView(text: "ULUBIONE", color: .yellow, angle: -5)
+            stampView(text: String(localized: "stamp_favorite"), color: .yellow, angle: -5)
                 .opacity(offset.height < -55 && abs(offset.width) <= 55 ? progress : 0)
         }
         .allowsHitTesting(false)

@@ -27,7 +27,13 @@ enum SwipeAction: Equatable {
 }
 
 enum PhotoSortOrder: String, CaseIterable {
-    case newest = "Najnowsze"
-    case oldest = "Najstarsze"
-    case random = "Losowe"
+    case newest, oldest, random
+
+    var localizedName: String {
+        switch self {
+        case .newest: String(localized: "newest")
+        case .oldest: String(localized: "oldest")
+        case .random: String(localized: "random")
+        }
+    }
 }

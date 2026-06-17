@@ -26,10 +26,10 @@ struct TrashBinView: View {
                         Image(systemName: "trash")
                             .font(.system(size: 48))
                             .foregroundStyle(.white.opacity(0.3))
-                        Text("Koszyk pusty")
+                        Text("trash_empty")
                             .font(.headline)
                             .foregroundStyle(.white.opacity(0.6))
-                        Text("Zdjęcia swipe'owane w lewo trafią tutaj")
+                        Text("swiped_left_go_here")
                             .font(.caption)
                             .foregroundStyle(.white.opacity(0.4))
                     }
@@ -72,12 +72,12 @@ struct TrashBinView: View {
                 }
             }
             .background(Color("turq").opacity(0.15).ignoresSafeArea())
-            .navigationTitle("Koszyk (\(viewModel.trashCount))")
+            .navigationTitle(String(localized: "trash_bin_title \(viewModel.trashCount)"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     if !viewModel.trashBin.isEmpty {
-                        Button(selectedItems.count == viewModel.trashCount ? "Odznacz wszystko" : "Zaznacz wszystko") {
+                        Button(selectedItems.count == viewModel.trashCount ? String(localized: "deselect_all") : String(localized: "select_all")) {
                             if selectedItems.count == viewModel.trashCount {
                                 selectedItems.removeAll()
                             } else {
@@ -95,26 +95,26 @@ struct TrashBinView: View {
                     }
                 }
             }
-            .alert("Usunąć \(viewModel.trashCount) zdjęć?", isPresented: $showDeleteAlert) {
-                Button("Anuluj", role: .cancel) {}
-                Button("Usuń wszystkie", role: .destructive) {
+            .alert(String(localized: "delete_photos_question \(viewModel.trashCount)"), isPresented: $showDeleteAlert) {
+                Button("cancel", role: .cancel) {}
+                Button("delete_all", role: .destructive) {
                     Task {
                         try? await viewModel.emptyTrash()
                         dismiss()
                     }
                 }
             } message: {
-                Text("Zdjęcia trafią do kosza systemowego na 30 dni.")
+                Text("photos_go_to_system_trash")
             }
-            .alert("Przywrócić \(selectedItems.count) zdjęć?", isPresented: $showRestoreAlert) {
-                Button("Anuluj", role: .cancel) {}
-                Button("Przywróć") {
+            .alert(String(localized: "restore_photos_question \(selectedItems.count)"), isPresented: $showRestoreAlert) {
+                Button("cancel", role: .cancel) {}
+                Button("restore") {
                     let toRestore = viewModel.trashBin.filter { selectedItems.contains($0.id) }
                     viewModel.restoreFromTrash(toRestore)
                     selectedItems.removeAll()
                 }
             } message: {
-                Text("Zaznaczone zdjęcia wrócą do puli do przejrzenia.")
+                Text("selected_photos_return_to_review")
             }
         }
     }
@@ -128,7 +128,7 @@ struct TrashBinView: View {
                 showRestoreAlert = true
             } label: {
                 Label(
-                    selectedItems.isEmpty ? "Przywróć" : "Przywróć (\(selectedItems.count))",
+                    selectedItems.isEmpty ? String(localized: "restore") : String(localized: "restore") + " (\(selectedItems.count))",
                     systemImage: "arrow.uturn.backward"
                 )
                 .font(.subheadline.weight(.semibold))
@@ -144,7 +144,7 @@ struct TrashBinView: View {
             Button {
                 showDeleteAlert = true
             } label: {
-                Label("Usuń wszystkie", systemImage: "trash.fill")
+                Label("delete_all", systemImage: "trash.fill")
                     .font(.subheadline.weight(.semibold))
                     .padding(.vertical, 14)
                     .padding(.horizontal, 4)

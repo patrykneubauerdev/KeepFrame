@@ -27,10 +27,10 @@ struct SessionDetailView: View {
                             Image(systemName: "hand.raised")
                                 .font(.system(size: 48))
                                 .foregroundStyle(.white.opacity(0.3))
-                            Text("Brak aktywności")
+                            Text("no_activity")
                                 .font(.headline)
                                 .foregroundStyle(.white.opacity(0.6))
-                            Text("W tej sesji nie przejrzano żadnych zdjęć")
+                            Text("no_photos_reviewed_in_session")
                                 .font(.caption)
                                 .foregroundStyle(.white.opacity(0.4))
                         }
@@ -43,11 +43,11 @@ struct SessionDetailView: View {
                     }
 
                     if !session.favoriteIdentifiers.isEmpty {
-                        photoSection(title: "Dodane do ulubionych", icon: "star.fill", identifiers: session.favoriteIdentifiers)
+                        photoSection(title: String(localized: "added_to_favorites"), icon: "star.fill", identifiers: session.favoriteIdentifiers)
                     }
 
                     if !session.keptIdentifiers.isEmpty {
-                        photoSection(title: "Zachowane", icon: "checkmark", identifiers: session.keptIdentifiers)
+                        photoSection(title: String(localized: "kept"), icon: "checkmark", identifiers: session.keptIdentifiers)
                     }
                 }
                 .padding()
@@ -62,7 +62,7 @@ struct SessionDetailView: View {
                 .ignoresSafeArea()
             )
             .background(Color("turq").opacity(0.15).ignoresSafeArea())
-            .navigationTitle("Sesja \(dateLabel)")
+            .navigationTitle(String(localized: "session_title \(dateLabel)"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -73,10 +73,10 @@ struct SessionDetailView: View {
                     }
                 }
             }
-            .alert("Przywracanie zdjęć", isPresented: $showRestoreHint) {
-                Button("Rozumiem") { hasSeenRestoreHint = true }
+            .alert("restoring_photos", isPresented: $showRestoreHint) {
+                Button("understood") { hasSeenRestoreHint = true }
             } message: {
-                Text("Przytrzymaj usunięte zdjęcie aby zobaczyć jak je przywrócić.")
+                Text("hold_deleted_photo_hint")
             }
             .onAppear {
                 if !hasSeenRestoreHint && !session.deletedIdentifiers.isEmpty {
@@ -99,7 +99,7 @@ struct SessionDetailView: View {
                 Image(systemName: "trash.fill")
                     .font(.caption)
                     .foregroundStyle(.white.opacity(0.6))
-                Text("Usunięte (\(session.deletedIdentifiers.count))")
+                Text(String(localized: "deleted_count \(session.deletedIdentifiers.count)"))
                     .font(.footnote.bold())
                     .foregroundStyle(.white.opacity(0.5))
                     .textCase(.uppercase)
@@ -122,7 +122,7 @@ struct SessionDetailView: View {
                 .font(.body)
                 .foregroundStyle(Color("turq"))
                 .symbolEffect(.pulse, options: .repeating)
-            Text("Przytrzymaj zdjęcie które\nchcesz przywrócić")
+            Text("hold_photo_to_restore")
                 .font(.caption)
                 .foregroundStyle(.white.opacity(0.6))
                 .multilineTextAlignment(.center)
@@ -239,19 +239,19 @@ private struct RestoreTutorialView: View {
                     .symbolEffect(.pulse, options: .repeating)
 
                 VStack(spacing: 4) {
-                    Text("Przywracanie usuniętych zdjęć")
+                    Text("restoring_deleted_photos")
                         .font(.headline)
                         .foregroundStyle(.white)
-                    Text("(dostępne do 30 dni od usunięcia)")
+                    Text("available_30_days")
                         .font(.caption)
                         .foregroundStyle(.white.opacity(0.4))
                 }
 
                 VStack(alignment: .leading, spacing: 14) {
-                    stepRow(number: "1", text: "Otwórz aplikację **Zdjęcia**")
-                    stepRow(number: "2", text: "Przejdź do zakładki **Inne rzeczy**")
-                    stepRow(number: "3", text: "Kliknij **Ostatnio usunięte**")
-                    stepRow(number: "4", text: "Zaznacz zdjęcia i kliknij **Odzyskaj**")
+                    stepRow(number: "1", text: "step_open_photos_app")
+                    stepRow(number: "2", text: "step_go_to_other_things")
+                    stepRow(number: "3", text: "step_click_recently_deleted")
+                    stepRow(number: "4", text: "step_select_and_recover")
                 }
                 .padding(.horizontal, 24)
 
@@ -263,7 +263,7 @@ private struct RestoreTutorialView: View {
                     }
                     dismiss()
                 } label: {
-                    Text("Przejdź do aplikacji **Zdjęcia**")
+                    Text("go_to_photos_app")
                         .font(.subheadline)
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)

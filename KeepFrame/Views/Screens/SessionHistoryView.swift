@@ -27,11 +27,11 @@ struct SessionHistoryView: View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 20) {
                 if !activeSessions.isEmpty {
-                    sessionSection(title: "Trwająca sesja", sessions: activeSessions, startIndex: 0)
+                    sessionSection(title: String(localized: "active_session"), sessions: activeSessions, startIndex: 0)
                 }
 
                 if !completedSessions.isEmpty {
-                    sessionSection(title: "Wcześniejsze", sessions: completedSessions, startIndex: activeSessions.count)
+                    sessionSection(title: String(localized: "previous_sessions"), sessions: completedSessions, startIndex: activeSessions.count)
                 }
             }
             .padding(.horizontal)
@@ -47,7 +47,7 @@ struct SessionHistoryView: View {
             .ignoresSafeArea()
         )
         .background(Color("turq").opacity(0.15).ignoresSafeArea())
-        .navigationTitle("Historia sesji")
+        .navigationTitle(String(localized: "session_history"))
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button { dismiss() } label: {
@@ -113,14 +113,14 @@ private struct SessionCard: View {
                 }
                 Spacer()
                 if session.isActive {
-                    Text("Aktywna")
+                    Text("active")
                         .font(.caption2.bold())
                         .foregroundStyle(.white)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 3)
                         .background(Color("turq"), in: Capsule())
                 } else {
-                    Text("Zakończona")
+                    Text("completed")
                         .font(.caption2.bold())
                         .foregroundStyle(.white.opacity(0.7))
                         .padding(.horizontal, 8)
@@ -134,7 +134,7 @@ private struct SessionCard: View {
                 statItem(icon: "star.fill", value: session.favoritedCount)
                 statItem(icon: "checkmark", value: session.keptCount)
                 Spacer()
-                Text("\(compactNumber(session.totalReviewed)) przejrzanych")
+                Text("\(compactNumber(session.totalReviewed)) \(String(localized: "reviewed_count"))")
                     .font(.caption2)
                     .foregroundStyle(.white.opacity(0.5))
                 Image(systemName: "chevron.right")
@@ -169,7 +169,7 @@ private struct SessionCard: View {
         if let end = session.endDate {
             return "\(start) – \(end.formatted(fmt))"
         }
-        return "od \(start)"
+        return String(localized: "since \(start)")
     }
 
     private func statItem(icon: String, value: Int) -> some View {

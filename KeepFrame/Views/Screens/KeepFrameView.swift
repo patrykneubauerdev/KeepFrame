@@ -53,7 +53,7 @@ struct KeepFrameView: View {
                 Button { showHistory = true } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "clock.arrow.circlepath")
-                        Text("Historia")
+                        Text(String(localized: "history"))
                             .font(.subheadline)
                     }
                     .foregroundStyle(.white)
@@ -81,26 +81,26 @@ struct KeepFrameView: View {
         .sheet(isPresented: $showTrash) {
             TrashBinView(viewModel: viewModel)
         }
-        .alert("Zakończyć sesję?", isPresented: $showEndSessionAlert) {
-            Button("Anuluj", role: .cancel) {}
+        .alert(String(localized: "end_session_question"), isPresented: $showEndSessionAlert) {
+            Button(String(localized: "cancel"), role: .cancel) {}
             if viewModel.trashCount > 0 {
-                Button("Zakończ i usuń zdjęcia", role: .destructive) {
+                Button(String(localized: "end_and_delete_photos"), role: .destructive) {
                     Task {
                         try? await viewModel.emptyTrash()
                         viewModel.endSession()
                     }
                 }
-                Button("Zakończ bez usuwania") {
+                Button(String(localized: "end_without_deleting")) {
                     viewModel.endSessionWithoutDeleting()
                 }
             } else {
-                Button("Zakończ") { viewModel.endSession() }
+                Button(String(localized: "end")) { viewModel.endSession() }
             }
         } message: {
             if viewModel.trashCount > 0 {
-                Text("Masz \(viewModel.trashCount) zdjęć w koszyku. Co chcesz z nimi zrobić?")
+                Text("trash_count_message \(viewModel.trashCount)")
             } else {
-                Text("Sesja zostanie zapisana w historii.")
+                Text("session_will_be_saved")
             }
         }
         .onAppear {
@@ -130,7 +130,7 @@ struct KeepFrameView: View {
         Button { showTrash = true } label: {
             HStack(spacing: 4) {
                 Image(systemName: "trash")
-                Text("Koszyk")
+                Text(String(localized: "trash_bin"))
                     .font(.subheadline)
                 if viewModel.trashCount > 0 {
                     Text("\(viewModel.trashCount)")
@@ -269,7 +269,7 @@ struct KeepFrameView: View {
                     Image(systemName: "photo.stack")
                         .font(.caption)
                         .foregroundStyle(.white.opacity(0.7))
-                    Text(verbatim: "\(viewModel.remainingCount) pozostało")
+                    Text(verbatim: "\(viewModel.remainingCount) \(String(localized: "remaining_count"))")
                         .font(.subheadline.bold())
                         .monospacedDigit()
                         .foregroundStyle(.white)
@@ -284,7 +284,7 @@ struct KeepFrameView: View {
             Button {
                 showEndSessionAlert = true
             } label: {
-                Text("Zakończ sesję")
+                Text("end_session_button")
                     .font(.subheadline.weight(.semibold))
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 14)
@@ -306,12 +306,12 @@ struct KeepFrameView: View {
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 64))
                 .foregroundStyle(Color("turq"))
-            Text("Wszystkie zdjęcia przejrzane!")
+            Text("all_photos_reviewed")
                 .font(.title2.bold())
                 .foregroundStyle(.white)
             if viewModel.trashCount > 0 {
                 Button { showTrash = true } label: {
-                    Label("Przejrzyj koszyk (\(viewModel.trashCount))", systemImage: "trash")
+                    Label("\(String(localized: "review_trash")) (\(viewModel.trashCount))", systemImage: "trash")
                         .font(.subheadline.weight(.semibold))
                 }
                 .buttonStyle(.borderedProminent)
@@ -347,10 +347,10 @@ struct KeepFrameView: View {
             Image(systemName: "photo.badge.exclamationmark")
                 .font(.system(size: 48))
                 .foregroundStyle(.red)
-            Text("Brak dostępu do zdjęć")
+            Text("no_photo_access")
                 .font(.headline)
                 .foregroundStyle(.white)
-            Text("Włącz dostęp w Ustawieniach → Prywatność → Zdjęcia")
+            Text("enable_access_in_settings")
                 .font(.caption)
                 .foregroundStyle(.white.opacity(0.5))
                 .multilineTextAlignment(.center)
@@ -373,7 +373,7 @@ struct SwipeTutorialView: View {
                     .foregroundStyle(Color("turq"))
                     .symbolEffect(.pulse, options: .repeating)
 
-                Text("Przeglądanie zdjęć")
+                Text("browsing_photos")
                     .font(.headline)
                     .foregroundStyle(.white)
 
@@ -381,33 +381,33 @@ struct SwipeTutorialView: View {
                     tutorialRow(
                         icon: "arrow.left",
                         color: .red,
-                        title: "Swipe w lewo",
-                        description: "Zdjęcie trafia do koszyka. Możesz je później przywrócić lub usunąć na stałe."
+                        title: String(localized: "swipe_left"),
+                        description: String(localized: "swipe_left_description")
                     )
 
                     tutorialRow(
                         icon: "arrow.right",
                         color: .green,
-                        title: "Swipe w prawo",
-                        description: "Zdjęcie zostaje zachowane w galerii bez zmian."
+                        title: String(localized: "swipe_right"),
+                        description: String(localized: "swipe_right_description")
                     )
 
                     tutorialRow(
                         icon: "arrow.up",
                         color: .yellow,
-                        title: "Swipe w górę",
-                        description: "Zdjęcie zostaje oznaczone jako ulubiona."
+                        title: String(localized: "swipe_up"),
+                        description: String(localized: "swipe_up_description")
                     )
                 }
                 .padding(.horizontal, 24)
 
-                Text("Możesz też korzystać z przycisków pod kartą")
+                Text("can_use_buttons_below")
                     .font(.caption)
                     .foregroundStyle(.white.opacity(0.4))
                     .multilineTextAlignment(.center)
 
                 Button { dismiss() } label: {
-                    Text("**Rozumiem**")
+                    Text("understood")
                         .font(.subheadline)
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
