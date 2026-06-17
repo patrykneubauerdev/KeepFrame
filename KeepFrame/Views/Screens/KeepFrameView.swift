@@ -303,21 +303,48 @@ struct KeepFrameView: View {
 
     private var sessionCompleteView: some View {
         VStack(spacing: 16) {
-            Image(systemName: "checkmark.circle.fill")
-                .font(.system(size: 64))
-                .foregroundStyle(Color("turq"))
-            Text("all_photos_reviewed")
-                .font(.title2.bold())
-                .foregroundStyle(.white)
-            if viewModel.trashCount > 0 {
-                Button { showTrash = true } label: {
-                    Label("\(String(localized: "review_trash")) (\(viewModel.trashCount))", systemImage: "trash")
-                        .font(.subheadline.weight(.semibold))
+            if viewModel.activeSession?.totalReviewed == 0 {
+                // No photos found (e.g. empty favorites)
+                Image(systemName: "photo.on.rectangle.angled")
+                    .font(.system(size: 64))
+                    .foregroundStyle(.white.opacity(0.3))
+                Text("no_photos_found")
+                    .font(.title2.bold())
+                    .foregroundStyle(.white)
+                Text("no_photos_found_description")
+                    .font(.caption)
+                    .foregroundStyle(.white.opacity(0.5))
+            } else {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 64))
+                    .foregroundStyle(Color("turq"))
+                Text("all_photos_reviewed")
+                    .font(.title2.bold())
+                    .foregroundStyle(.white)
+                if viewModel.trashCount > 0 {
+                    Button { showTrash = true } label: {
+                        Label("\(String(localized: "review_trash")) (\(viewModel.trashCount))", systemImage: "trash")
+                            .font(.subheadline.weight(.semibold))
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.red)
+                    .glassEffect(.regular.interactive())
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(.red)
-                .glassEffect(.regular.interactive())
             }
+
+            Button {
+                showEndSessionAlert = true
+            } label: {
+                Text("end_session_button")
+                    .font(.subheadline.weight(.semibold))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+            }
+            .tint(Color("turq"))
+            .buttonStyle(.borderedProminent)
+            .glassEffect(.regular.interactive())
+            .padding(.horizontal, 35)
+            .padding(.top, 8)
         }
     }
 

@@ -567,6 +567,18 @@
         "pl" : { "stringUnit" : { "state" : "translated", "value" : "Twoje zakończone sesje pojawią się tutaj" } }
       }
     },
+    "no_photos_found" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No photos found" } },
+        "pl" : { "stringUnit" : { "state" : "translated", "value" : "Nie znaleziono zdjęć" } }
+      }
+    },
+    "no_photos_found_description" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "There are no photos matching your selection" } },
+        "pl" : { "stringUnit" : { "state" : "translated", "value" : "Brak zdjęć pasujących do wybranego zakresu" } }
+      }
+    },
     "no_photos_reviewed_in_session" : {
       "localizations" : {
         "en" : {
