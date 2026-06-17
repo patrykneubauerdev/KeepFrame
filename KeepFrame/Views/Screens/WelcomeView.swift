@@ -15,6 +15,7 @@ struct WelcomeView: View {
     @State private var sourceMode: SourceMode = .all
     @State private var selectedYear: Int = 2025
     @State private var showInfo = false
+    @State private var showHistory = false
     @State private var appeared = false
     let onStart: () -> Void
 
@@ -129,10 +130,23 @@ struct WelcomeView: View {
                 .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.3), value: appeared)
             }
 
-            // Info button
+            // Top buttons
             VStack {
                 HStack {
+                    Button { showHistory = true } label: {
+                        Image(systemName: "clock.arrow.circlepath")
+                            .font(.body.weight(.semibold))
+                            .foregroundStyle(.white)
+                            .padding(10)
+                            .glassEffect(.regular.interactive(), in: .circle)
+                    }
+                    .padding(.leading, 20)
+                    .padding(.top, 56)
+                    .opacity(appeared ? 1 : 0)
+                    .animation(.easeOut(duration: 0.4).delay(0.35), value: appeared)
+
                     Spacer()
+
                     Button { showInfo = true } label: {
                         Image(systemName: "info.circle")
                             .font(.body.weight(.semibold))
@@ -154,6 +168,9 @@ struct WelcomeView: View {
             infoSheet
                 .presentationDetents([.medium])
                 .presentationDragIndicator(.visible)
+        }
+        .sheet(isPresented: $showHistory) {
+            NavigationStack { SessionHistoryView(hideActive: true) }
         }
         .task {
             let status = await service.requestAuthorization()

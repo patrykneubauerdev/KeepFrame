@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct SessionHistoryView: View {
+    var hideActive: Bool = false
     @Environment(\.dismiss) private var dismiss
     @Query(sort: \SessionRecord.startDate, order: .reverse)
     private var sessions: [SessionRecord]
@@ -16,7 +17,7 @@ struct SessionHistoryView: View {
     @State private var selectedSession: SessionRecord?
 
     private var activeSessions: [SessionRecord] {
-        sessions.filter { $0.isActive }
+        hideActive ? [] : sessions.filter { $0.isActive }
     }
 
     private var completedSessions: [SessionRecord] {
@@ -26,12 +27,29 @@ struct SessionHistoryView: View {
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 20) {
-                if !activeSessions.isEmpty {
-                    sessionSection(title: String(localized: "active_session"), sessions: activeSessions, startIndex: 0)
-                }
+                if activeSessions.isEmpty && completedSessions.isEmpty {
+                    VStack(spacing: 12) {
+                        Image(systemName: "clock")
+                            .font(.system(size: 48))
+                            .foregroundStyle(.white.opacity(0.3))
+                        Text("no_session_history")
+                            .font(.headline)
+                            .foregroundStyle(.white.opacity(0.6))
+                        Text("no_session_history_description")
+                            .font(.caption)
+                            .foregroundStyle(.white.opacity(0.4))
+                            .multilineTextAlignment(.center)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 100)
+                } else {
+                    if !activeSessions.isEmpty {
+                        sessionSection(title: String(localized: "active_session"), sessions: activeSessions, startIndex: 0)
+                    }
 
-                if !completedSessions.isEmpty {
-                    sessionSection(title: String(localized: "previous_sessions"), sessions: completedSessions, startIndex: activeSessions.count)
+                    if !completedSessions.isEmpty {
+                        sessionSection(title: hideActive ? nil : String(localized: "previous_sessions"), sessions: completedSessions, startIndex: activeSessions.count)
+                    }
                 }
             }
             .padding(.horizontal)
@@ -71,13 +89,15 @@ struct SessionHistoryView: View {
         }
     }
 
-    private func sessionSection(title: String, sessions: [SessionRecord], startIndex: Int) -> some View {
+    private func sessionSection(title: String?, sessions: [SessionRecord], startIndex: Int) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text(title)
-                .font(.footnote.bold())
-                .foregroundStyle(.white.opacity(0.5))
-                .textCase(.uppercase)
-                .padding(.leading, 4)
+            if let title {
+                Text(title)
+                    .font(.footnote.bold())
+                    .foregroundStyle(.white.opacity(0.5))
+                    .textCase(.uppercase)
+                    .padding(.leading, 4)
+            }
 
             ForEach(Array(zip(sessions.indices, sessions)), id: \.1.persistentModelID) { i, session in
                 SessionCard(session: session)

@@ -555,6 +555,18 @@
         }
       }
     },
+    "no_session_history" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No history yet" } },
+        "pl" : { "stringUnit" : { "state" : "translated", "value" : "Brak historii" } }
+      }
+    },
+    "no_session_history_description" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your completed sessions will appear here" } },
+        "pl" : { "stringUnit" : { "state" : "translated", "value" : "Twoje zakończone sesje pojawią się tutaj" } }
+      }
+    },
     "no_photos_reviewed_in_session" : {
       "localizations" : {
         "en" : {
