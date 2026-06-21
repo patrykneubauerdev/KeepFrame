@@ -112,13 +112,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "All photos reviewed!"
+            "value" : "All photos in this deck reviewed!"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wszystkie zdjęcia przejrzane!"
+            "value" : "Wszystkie zdjęcia z tej talii przejrzane!"
           }
         }
       }

@@ -218,7 +218,17 @@ struct KeepFrameView: View {
                     onSwipe: { action in
                         buttonTrigger = nil
                         dragProgress = 0
-                        viewModel.perform(action)
+                        let isLast = viewModel.remainingCount <= 1
+                        if isLast {
+                            withAnimation(.easeOut(duration: 0.3)) {
+                                showButtons = false
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                                viewModel.perform(action)
+                            }
+                        } else {
+                            viewModel.perform(action)
+                        }
                         isFirstReveal = false
                     }
                 )
@@ -279,7 +289,7 @@ struct KeepFrameView: View {
                 .glassEffect(.regular, in: .capsule)
             }
             .opacity(showButtons ? 1 : 0)
-            .animation(.easeOut(duration: 0.3).delay(0.25), value: showButtons)
+            .animation(.easeOut(duration: 0.25).delay(0.12), value: showButtons)
 
             Button {
                 showEndSessionAlert = true
@@ -294,7 +304,7 @@ struct KeepFrameView: View {
             .glassEffect(.regular.interactive())
             .padding(.horizontal, 35)
             .opacity(showButtons ? 1 : 0)
-            .animation(.easeOut(duration: 0.3).delay(0.25), value: showButtons)
+            .animation(.easeOut(duration: 0.25).delay(0.18), value: showButtons)
 
             Spacer()
         }
@@ -302,50 +312,12 @@ struct KeepFrameView: View {
     }
 
     private var sessionCompleteView: some View {
-        VStack(spacing: 16) {
-            if viewModel.activeSession?.totalReviewed == 0 {
-                // No photos found (e.g. empty favorites)
-                Image(systemName: "photo.on.rectangle.angled")
-                    .font(.system(size: 64))
-                    .foregroundStyle(.white.opacity(0.3))
-                Text("no_photos_found")
-                    .font(.title2.bold())
-                    .foregroundStyle(.white)
-                Text("no_photos_found_description")
-                    .font(.caption)
-                    .foregroundStyle(.white.opacity(0.5))
-            } else {
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 64))
-                    .foregroundStyle(Color("turq"))
-                Text("all_photos_reviewed")
-                    .font(.title2.bold())
-                    .foregroundStyle(.white)
-                if viewModel.trashCount > 0 {
-                    Button { showTrash = true } label: {
-                        Label("\(String(localized: "review_trash")) (\(viewModel.trashCount))", systemImage: "trash")
-                            .font(.subheadline.weight(.semibold))
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.red)
-                    .glassEffect(.regular.interactive())
-                }
-            }
-
-            Button {
-                showEndSessionAlert = true
-            } label: {
-                Text("end_session_button")
-                    .font(.subheadline.weight(.semibold))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 14)
-            }
-            .tint(Color("turq"))
-            .buttonStyle(.borderedProminent)
-            .glassEffect(.regular.interactive())
-            .padding(.horizontal, 35)
-            .padding(.top, 8)
-        }
+        SessionCompleteContent(
+            totalReviewed: viewModel.activeSession?.totalReviewed ?? 0,
+            trashCount: viewModel.trashCount,
+            onTrash: { showTrash = true },
+            onEnd: { showEndSessionAlert = true }
+        )
     }
 
     private func statLabel(icon: String, value: Int, color: Color) -> some View {
@@ -478,6 +450,96 @@ struct SwipeTutorialView: View {
             }
 
             Spacer(minLength: 0)
+        }
+    }
+}
+
+
+// MARK: - Session Complete
+
+private struct SessionCompleteContent: View {
+    let totalReviewed: Int
+    let trashCount: Int
+    let onTrash: () -> Void
+    let onEnd: () -> Void
+    @State private var appeared = false
+
+    var body: some View {
+        VStack(spacing: 32) {
+            Spacer()
+
+            if totalReviewed == 0 {
+                Image(systemName: "photo.on.rectangle.angled")
+                    .font(.system(size: 52))
+                    .foregroundStyle(.white.opacity(0.3))
+                    .scaleEffect(appeared ? 1 : 0.7)
+                    .opacity(appeared ? 1 : 0)
+                    .animation(.spring(duration: 0.5, bounce: 0.3), value: appeared)
+
+                Text("no_photos_found")
+                    .font(.title3.bold())
+                    .foregroundStyle(.white)
+                    .opacity(appeared ? 1 : 0)
+                    .animation(.easeOut(duration: 0.4).delay(0.1), value: appeared)
+
+                Text("no_photos_found_description")
+                    .font(.subheadline)
+                    .foregroundStyle(.white.opacity(0.5))
+                    .multilineTextAlignment(.center)
+                    .opacity(appeared ? 1 : 0)
+                    .animation(.easeOut(duration: 0.4).delay(0.15), value: appeared)
+            } else {
+                Image(systemName: "party.popper.fill")
+                    .font(.system(size: 52))
+                    .foregroundStyle(Color.white)
+                    .scaleEffect(appeared ? 1 : 0.7)
+                    .opacity(appeared ? 1 : 0)
+                    .animation(.spring(duration: 0.5, bounce: 0.3), value: appeared)
+
+                Text("all_photos_reviewed")
+                    .font(.title3.bold())
+                    .foregroundStyle(.white)
+                    .opacity(appeared ? 1 : 0)
+                    .animation(.easeOut(duration: 0.4).delay(0.1), value: appeared)
+
+                if trashCount > 0 {
+                    Button(action: onTrash) {
+                        Label("\(String(localized: "review_trash")) (\(trashCount))", systemImage: "trash")
+                            .font(.subheadline.weight(.semibold))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 14)
+                    }
+                    .tint(Color("turq"))
+                    .buttonStyle(.bordered)
+                    .glassEffect(.regular.interactive())
+                    .padding(.horizontal, 35)
+                    .opacity(appeared ? 1 : 0)
+                    .offset(y: appeared ? 0 : 15)
+                    .animation(.easeOut(duration: 0.4).delay(0.2), value: appeared)
+                }
+            }
+
+            Button(action: onEnd) {
+                Text("end_session_button")
+                    .font(.subheadline.weight(.semibold))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+            }
+            .tint(Color("turq"))
+            .buttonStyle(.borderedProminent)
+            .glassEffect(.regular.interactive())
+            .padding(.horizontal, 35)
+            .opacity(appeared ? 1 : 0)
+            .offset(y: appeared ? 0 : 15)
+            .animation(.easeOut(duration: 0.4).delay(0.25), value: appeared)
+
+            Spacer()
+        }
+        .padding()
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                appeared = true
+            }
         }
     }
 }
