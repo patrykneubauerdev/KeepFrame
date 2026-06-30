@@ -10,6 +10,7 @@ import SwiftUI
 struct SwipeableCardView: View {
     let photo: PhotoItem
     var isFirstCard: Bool = false
+    var disableFavorite: Bool = false
     var buttonAction: SwipeAction? = nil
     @Binding var dragProgress: CGFloat
     let onReady: () -> Void
@@ -68,7 +69,7 @@ struct SwipeableCardView: View {
                         dismiss(to: .leading) { onSwipe(.delete) }
                     } else if w > swipeThreshold {
                         dismiss(to: .trailing) { onSwipe(.keep) }
-                    } else if h < -swipeThreshold {
+                    } else if h < -swipeThreshold && !disableFavorite {
                         dismiss(to: .top) { onSwipe(.favorite) }
                     } else {
                         reset()
@@ -103,7 +104,9 @@ struct SwipeableCardView: View {
             switch action {
             case .delete: dismiss(to: .leading) { onSwipe(.delete) }
             case .keep: dismiss(to: .trailing) { onSwipe(.keep) }
-            case .favorite: dismiss(to: .top) { onSwipe(.favorite) }
+            case .favorite:
+                guard !disableFavorite else { return }
+                dismiss(to: .top) { onSwipe(.favorite) }
             }
         }
     }

@@ -205,6 +205,7 @@ struct KeepFrameView: View {
                 SwipeableCardView(
                     photo: photo,
                     isFirstCard: isFirstReveal,
+                    disableFavorite: viewModel.isFavoritesSession,
                     buttonAction: buttonTrigger,
                     dragProgress: $dragProgress,
                     onReady: {
@@ -250,10 +251,11 @@ struct KeepFrameView: View {
                 .offset(y: showButtons ? 0 : 20)
                 .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.0), value: showButtons)
 
-                ActionButton(icon: "star.fill", color: .yellow) {
+                ActionButton(icon: "star.fill", color: viewModel.isFavoritesSession ? .gray : .yellow) {
                     triggerAction(.favorite)
                 }
-                .opacity(showButtons ? 1 : 0)
+                .disabled(viewModel.isFavoritesSession)
+                .opacity(showButtons ? (viewModel.isFavoritesSession ? 0.4 : 1) : 0)
                 .offset(y: showButtons ? 0 : 20)
                 .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.08), value: showButtons)
 
@@ -471,7 +473,7 @@ private struct SessionCompleteContent: View {
             if totalReviewed == 0 {
                 Image(systemName: "photo.on.rectangle.angled")
                     .font(.system(size: 52))
-                    .foregroundStyle(.white.opacity(0.3))
+                    .foregroundStyle(.white)
                     .scaleEffect(appeared ? 1 : 0.7)
                     .opacity(appeared ? 1 : 0)
                     .animation(.spring(duration: 0.5, bounce: 0.3), value: appeared)
@@ -484,7 +486,7 @@ private struct SessionCompleteContent: View {
 
                 Text("no_photos_found_description")
                     .font(.subheadline)
-                    .foregroundStyle(.white.opacity(0.5))
+                    .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
                     .opacity(appeared ? 1 : 0)
                     .animation(.easeOut(duration: 0.4).delay(0.15), value: appeared)

@@ -19,6 +19,7 @@ final class PhotoDeckViewModel {
     private(set) var trashBin: [PhotoItem] = []
     var trashSelection: Set<String>?
     private(set) var hasActiveSession = false
+    private(set) var isFavoritesSession = false
 
     var activeSession: SessionRecord?
     var selectedYear: Int?
@@ -103,6 +104,7 @@ final class PhotoDeckViewModel {
         try? ctx.save()
         activeSession = nil
         hasActiveSession = false
+        isFavoritesSession = false
         photos = []
         currentIndex = 0
         trashBin = []
@@ -119,6 +121,7 @@ final class PhotoDeckViewModel {
         try? ctx.save()
         activeSession = nil
         hasActiveSession = false
+        isFavoritesSession = false
         photos = []
         currentIndex = 0
         trashBin = []
@@ -141,6 +144,7 @@ final class PhotoDeckViewModel {
         case .favorite:
             activeSession?.favoritedCount += 1
             activeSession?.favoriteIdentifiers.append(photo.id)
+            Task { try? await service.favoriteAsset(photo.asset) }
         case .keep:
             activeSession?.keptCount += 1
             activeSession?.keptIdentifiers.append(photo.id)
@@ -197,17 +201,7 @@ final class PhotoDeckViewModel {
     // MARK: - Favorites
 
     func fetchFavoritePhotos() -> [PHAsset] {
-        guard let ctx = modelContext else { return [] }
-        let descriptor = FetchDescriptor<SessionRecord>()
-        guard let sessions = try? ctx.fetch(descriptor) else { return [] }
-
-        let allFavIds = Set(sessions.flatMap(\.favoriteIdentifiers))
-        guard !allFavIds.isEmpty else { return [] }
-
-        let result = PHAsset.fetchAssets(withLocalIdentifiers: Array(allFavIds), options: nil)
-        var assets: [PHAsset] = []
-        result.enumerateObjects { asset, _, _ in assets.append(asset) }
-        return assets
+        service.fetchSystemFavorites()
     }
 
     func startFavoritesSession() async {
@@ -238,6 +232,7 @@ final class PhotoDeckViewModel {
         try? ctx.save()
         activeSession = session
         hasActiveSession = true
+        isFavoritesSession = true
         currentIndex = 0
         trashBin = []
 
