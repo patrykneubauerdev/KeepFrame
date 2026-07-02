@@ -154,7 +154,7 @@ private struct SessionCard: View {
                 statItem(icon: "star.fill", value: session.favoritedCount)
                 statItem(icon: "checkmark", value: session.keptCount)
                 Spacer()
-                Text("\(compactNumber(session.totalReviewed)) \(String(localized: "reviewed_count"))")
+                Text("\(session.totalReviewed.compactFormatted) \(String(localized: "reviewed_count"))")
                     .font(.caption2)
                     .foregroundStyle(.white.opacity(0.5))
                 Image(systemName: "chevron.right")
@@ -197,19 +197,11 @@ private struct SessionCard: View {
             Image(systemName: icon)
                 .font(.caption)
                 .foregroundStyle(.white.opacity(0.7))
-            Text(compactNumber(value))
+            Text(value.compactFormatted)
                 .font(.subheadline.bold())
                 .foregroundStyle(.white)
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
-        }
-    }
-
-    private func compactNumber(_ value: Int) -> String {
-        switch value {
-        case ..<1_000: return "\(value)"
-        case ..<1_000_000: return String(format: "%.1fk", Double(value) / 1_000)
-        default: return String(format: "%.1fM", Double(value) / 1_000_000)
         }
     }
 }

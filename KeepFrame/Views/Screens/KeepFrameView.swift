@@ -314,7 +314,7 @@ struct KeepFrameView: View {
     }
 
     private var sessionCompleteView: some View {
-        SessionCompleteContent(
+        SessionCompleteView(
             totalReviewed: viewModel.activeSession?.totalReviewed ?? 0,
             trashCount: viewModel.trashCount,
             onTrash: { showTrash = true },
@@ -328,19 +328,12 @@ struct KeepFrameView: View {
                 .font(.caption)
                 .foregroundStyle(.white.opacity(0.7))
                 .frame(width: 16)
-            Text(compactNumber(value))
+            Text(value.compactFormatted)
                 .font(.subheadline.bold())
                 .monospacedDigit()
                 .foregroundStyle(.white)
                 .frame(minWidth: 32)
         }
-    }
-
-    private func compactNumber(_ value: Int) -> String {
-        if value >= 1_000_000 { return String(format: "%.1fm", Double(value) / 1_000_000) }
-        if value >= 100_000 { return "\(value / 1000)k" }
-        if value >= 10_000 { return String(format: "%.1fk", Double(value) / 1000) }
-        return "\(value)"
     }
 
     private var deniedView: some View {
@@ -357,191 +350,5 @@ struct KeepFrameView: View {
                 .multilineTextAlignment(.center)
         }
         .padding()
-    }
-}
-
-
-// MARK: - Swipe Tutorial
-
-struct SwipeTutorialView: View {
-    @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        NavigationStack {
-            VStack(spacing: 16) {
-                Image(systemName: "hand.draw")
-                    .font(.system(size: 24))
-                    .foregroundStyle(Color("turq"))
-                    .symbolEffect(.pulse, options: .repeating)
-
-                Text("browsing_photos")
-                    .font(.headline)
-                    .foregroundStyle(.white)
-
-                VStack(spacing: 12) {
-                    tutorialRow(
-                        icon: "arrow.left",
-                        color: .red,
-                        title: String(localized: "swipe_left"),
-                        description: String(localized: "swipe_left_description")
-                    )
-
-                    tutorialRow(
-                        icon: "arrow.right",
-                        color: .green,
-                        title: String(localized: "swipe_right"),
-                        description: String(localized: "swipe_right_description")
-                    )
-
-                    tutorialRow(
-                        icon: "arrow.up",
-                        color: .yellow,
-                        title: String(localized: "swipe_up"),
-                        description: String(localized: "swipe_up_description")
-                    )
-                }
-                .padding(.horizontal, 24)
-
-                Text("can_use_buttons_below")
-                    .font(.caption)
-                    .foregroundStyle(.white.opacity(0.4))
-                    .multilineTextAlignment(.center)
-
-                Button { dismiss() } label: {
-                    Text("understood")
-                        .font(.subheadline)
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 14)
-                }
-                .tint(Color("turq"))
-                .buttonStyle(.borderedProminent)
-                .glassEffect(.regular.interactive())
-            }
-            .padding(.horizontal, 24)
-            .padding(.vertical, 16)
-            .background(Color("turq").opacity(0.15).ignoresSafeArea())
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button { dismiss() } label: {
-                        Image(systemName: "xmark")
-                            .font(.footnote.weight(.bold))
-                            .foregroundStyle(.white)
-                    }
-                }
-            }
-        }
-    }
-
-    private func tutorialRow(icon: String, color: Color, title: String, description: String) -> some View {
-        HStack(spacing: 14) {
-            Image(systemName: icon)
-                .font(.title2.weight(.bold))
-                .foregroundStyle(color)
-                .frame(width: 44, height: 44)
-                .background(color.opacity(0.15), in: Circle())
-
-            VStack(alignment: .leading, spacing: 3) {
-                Text(title)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.white)
-                Text(description)
-                    .font(.caption)
-                    .foregroundStyle(.white.opacity(0.6))
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-
-            Spacer(minLength: 0)
-        }
-    }
-}
-
-
-// MARK: - Session Complete
-
-private struct SessionCompleteContent: View {
-    let totalReviewed: Int
-    let trashCount: Int
-    let onTrash: () -> Void
-    let onEnd: () -> Void
-    @State private var appeared = false
-
-    var body: some View {
-        VStack(spacing: 32) {
-            Spacer()
-
-            if totalReviewed == 0 {
-                Image(systemName: "photo.on.rectangle.angled")
-                    .font(.system(size: 52))
-                    .foregroundStyle(.white)
-                    .scaleEffect(appeared ? 1 : 0.7)
-                    .opacity(appeared ? 1 : 0)
-                    .animation(.spring(duration: 0.5, bounce: 0.3), value: appeared)
-
-                Text("no_photos_found")
-                    .font(.title3.bold())
-                    .foregroundStyle(.white)
-                    .opacity(appeared ? 1 : 0)
-                    .animation(.easeOut(duration: 0.4).delay(0.1), value: appeared)
-
-                Text("no_photos_found_description")
-                    .font(.subheadline)
-                    .foregroundStyle(.white)
-                    .multilineTextAlignment(.center)
-                    .opacity(appeared ? 1 : 0)
-                    .animation(.easeOut(duration: 0.4).delay(0.15), value: appeared)
-            } else {
-                Image(systemName: "party.popper.fill")
-                    .font(.system(size: 52))
-                    .foregroundStyle(Color.white)
-                    .scaleEffect(appeared ? 1 : 0.7)
-                    .opacity(appeared ? 1 : 0)
-                    .animation(.spring(duration: 0.5, bounce: 0.3), value: appeared)
-
-                Text("all_photos_reviewed")
-                    .font(.title3.bold())
-                    .foregroundStyle(.white)
-                    .opacity(appeared ? 1 : 0)
-                    .animation(.easeOut(duration: 0.4).delay(0.1), value: appeared)
-
-                if trashCount > 0 {
-                    Button(action: onTrash) {
-                        Label("\(String(localized: "review_trash")) (\(trashCount))", systemImage: "trash")
-                            .font(.subheadline.weight(.semibold))
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 14)
-                    }
-                    .tint(Color("turq"))
-                    .buttonStyle(.bordered)
-                    .glassEffect(.regular.interactive())
-                    .padding(.horizontal, 35)
-                    .opacity(appeared ? 1 : 0)
-                    .offset(y: appeared ? 0 : 15)
-                    .animation(.easeOut(duration: 0.4).delay(0.2), value: appeared)
-                }
-            }
-
-            Button(action: onEnd) {
-                Text("end_session_button")
-                    .font(.subheadline.weight(.semibold))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 14)
-            }
-            .tint(Color("turq"))
-            .buttonStyle(.borderedProminent)
-            .glassEffect(.regular.interactive())
-            .padding(.horizontal, 35)
-            .opacity(appeared ? 1 : 0)
-            .offset(y: appeared ? 0 : 15)
-            .animation(.easeOut(duration: 0.4).delay(0.25), value: appeared)
-
-            Spacer()
-        }
-        .padding()
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                appeared = true
-            }
-        }
     }
 }

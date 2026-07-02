@@ -37,7 +37,7 @@ struct SwipeableCardView: View {
     var body: some View {
         ZStack {
             if !showFront {
-                CardBack()
+                CardBackView()
             } else {
                 PolaroidCard(image: showImage ? photo.thumbnail : nil)
                     .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
