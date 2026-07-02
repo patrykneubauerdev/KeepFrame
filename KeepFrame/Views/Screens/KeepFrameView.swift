@@ -243,7 +243,7 @@ struct KeepFrameView: View {
                 }
             }
 
-            HStack(spacing: 40) {
+            HStack(spacing: viewModel.isFavoritesSession ? 60 : 40) {
                 ActionButton(icon: "xmark", color: .red) {
                     triggerAction(.delete)
                 }
@@ -251,29 +251,32 @@ struct KeepFrameView: View {
                 .offset(y: showButtons ? 0 : 20)
                 .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.0), value: showButtons)
 
-                ActionButton(icon: "star.fill", color: viewModel.isFavoritesSession ? .gray : .yellow) {
-                    triggerAction(.favorite)
+                if !viewModel.isFavoritesSession {
+                    ActionButton(icon: "star.fill", color: .yellow) {
+                        triggerAction(.favorite)
+                    }
+                    .opacity(showButtons ? 1 : 0)
+                    .offset(y: showButtons ? 0 : 20)
+                    .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.08), value: showButtons)
                 }
-                .disabled(viewModel.isFavoritesSession)
-                .opacity(showButtons ? (viewModel.isFavoritesSession ? 0.4 : 1) : 0)
-                .offset(y: showButtons ? 0 : 20)
-                .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.08), value: showButtons)
 
                 ActionButton(icon: "checkmark", color: .green) {
                     triggerAction(.keep)
                 }
                 .opacity(showButtons ? 1 : 0)
                 .offset(y: showButtons ? 0 : 20)
-                .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.16), value: showButtons)
+                .animation(.spring(duration: 0.5, bounce: 0.3).delay(viewModel.isFavoritesSession ? 0.08 : 0.16), value: showButtons)
             }
 
             VStack(spacing: 8) {
                 HStack(spacing: 20) {
                     statLabel(icon: "trash.fill", value: viewModel.activeSession?.deletedCount ?? 0, color: .red)
-                    statLabel(icon: "star.fill", value: viewModel.activeSession?.favoritedCount ?? 0, color: .yellow)
+                    if !viewModel.isFavoritesSession {
+                        statLabel(icon: "star.fill", value: viewModel.activeSession?.favoritedCount ?? 0, color: .yellow)
+                    }
                     statLabel(icon: "checkmark", value: viewModel.activeSession?.keptCount ?? 0, color: .green)
                 }
-                .frame(width: 240)
+                .frame(width: viewModel.isFavoritesSession ? 160 : 240)
                 .padding(.vertical, 12)
                 .glassEffect(.regular, in: .capsule)
 

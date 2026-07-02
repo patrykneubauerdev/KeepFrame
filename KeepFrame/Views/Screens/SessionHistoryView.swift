@@ -151,7 +151,9 @@ private struct SessionCard: View {
 
             HStack(spacing: 16) {
                 statItem(icon: "trash.fill", value: session.deletedCount)
-                statItem(icon: "star.fill", value: session.favoritedCount)
+                if !session.isFavoritesSession {
+                    statItem(icon: "star.fill", value: session.favoritedCount)
+                }
                 statItem(icon: "checkmark", value: session.keptCount)
                 Spacer()
                 Text("\(session.totalReviewed.compactFormatted) \(String(localized: "reviewed_count"))")

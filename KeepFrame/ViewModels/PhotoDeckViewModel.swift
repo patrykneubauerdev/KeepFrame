@@ -91,6 +91,7 @@ final class PhotoDeckViewModel {
 
         currentIndex = min(session.currentIndex, photos.count)
         hasActiveSession = true
+        isFavoritesSession = session.isFavoritesSession
 
         for i in currentIndex..<min(currentIndex + 6, photos.count) {
             await loadThumbnail(for: i)
@@ -226,7 +227,7 @@ final class PhotoDeckViewModel {
                 s.endDate = s.endDate ?? .now
             }
         }
-        let session = SessionRecord()
+        let session = SessionRecord(isFavoritesSession: true)
         session.assetIdentifiers = photos.map(\.id)
         ctx.insert(session)
         try? ctx.save()
