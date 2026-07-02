@@ -99,10 +99,11 @@ struct SessionDetailView: View {
                 Image(systemName: "trash.fill")
                     .font(.caption)
                     .foregroundStyle(.white.opacity(0.6))
-                Text(String(localized: "deleted_count \(session.deletedIdentifiers.count)"))
+                Text("\(String(localized: "deleted_count_label")) (\(session.deletedIdentifiers.count.compactFormatted))")
                     .font(.footnote.bold())
                     .foregroundStyle(.white.opacity(0.5))
                     .textCase(.uppercase)
+                    .fixedSize()
                 Spacer()
                 hintLabel
             }
@@ -148,10 +149,11 @@ struct SessionDetailView: View {
                 Image(systemName: icon)
                     .font(.caption)
                     .foregroundStyle(.white.opacity(0.6))
-                Text("\(title) (\(identifiers.count))")
+                Text("\(title) (\(identifiers.count.compactFormatted))")
                     .font(.footnote.bold())
                     .foregroundStyle(.white.opacity(0.5))
                     .textCase(.uppercase)
+                    .fixedSize()
             }
             .padding(.leading, 4)
 
@@ -208,13 +210,24 @@ struct SessionDetailView: View {
 
     private func loadThumbnail(id: String, isDeleted: Bool) {
         guard thumbnails[id] == nil else { return }
-        if isDeleted {
-            let safe = id.replacingOccurrences(of: "/", with: "_")
-            let url = PhotoDeckViewModel.deletedThumbnailsDirectory.appendingPathComponent(safe + ".jpg")
-            if let data = try? Data(contentsOf: url), let img = UIImage(data: data) {
-                thumbnails[id] = img
-            }
-        } else {
+        let safe = id.replacingOccurrences(of: "/", with: "_")
+
+        // Try SessionThumbnails first (new unified cache)
+        let sessionURL = PhotoDeckViewModel.sessionThumbnailsDirectory.appendingPathComponent(safe + ".jpg")
+        if let data = try? Data(contentsOf: sessionURL), let img = UIImage(data: data) {
+            thumbnails[id] = img
+            return
+        }
+
+        // Fallback: legacy DeletedThumbnails folder
+        let deletedURL = PhotoDeckViewModel.deletedThumbnailsDirectory.appendingPathComponent(safe + ".jpg")
+        if let data = try? Data(contentsOf: deletedURL), let img = UIImage(data: data) {
+            thumbnails[id] = img
+            return
+        }
+
+        // Fallback: try loading from Photos library (still available)
+        if !isDeleted {
             Task {
                 let result = PHAsset.fetchAssets(withLocalIdentifiers: [id], options: nil)
                 guard let asset = result.firstObject else { return }

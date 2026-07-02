@@ -140,15 +140,18 @@ final class PhotoDeckViewModel {
             trashBin.append(photo)
             activeSession?.deletedCount += 1
             activeSession?.deletedIdentifiers.append(photo.id)
-            // Save thumbnail for history viewing
-            Task { await saveDeletedThumbnail(for: photo) }
+            Task { await saveSessionThumbnail(for: photo) }
         case .favorite:
             activeSession?.favoritedCount += 1
             activeSession?.favoriteIdentifiers.append(photo.id)
-            Task { try? await service.favoriteAsset(photo.asset) }
+            Task {
+                try? await service.favoriteAsset(photo.asset)
+                await saveSessionThumbnail(for: photo)
+            }
         case .keep:
             activeSession?.keptCount += 1
             activeSession?.keptIdentifiers.append(photo.id)
+            Task { await saveSessionThumbnail(for: photo) }
         }
 
         currentIndex += 1
@@ -257,7 +260,7 @@ final class PhotoDeckViewModel {
         await service.loadThumbnail(for: item.asset, size: CGSize(width: 200, height: 200))
     }
 
-    private func saveDeletedThumbnail(for photo: PhotoItem) async {
+    private func saveSessionThumbnail(for photo: PhotoItem) async {
         let image: UIImage?
         if let existing = photo.thumbnail {
             image = existing
@@ -265,13 +268,19 @@ final class PhotoDeckViewModel {
             image = await service.loadThumbnail(for: photo.asset, size: CGSize(width: 200, height: 200))
         }
         guard let image, let data = image.jpegData(compressionQuality: 0.5) else { return }
-        let dir = Self.deletedThumbnailsDirectory
+        let dir = Self.sessionThumbnailsDirectory
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         let safe = photo.id.replacingOccurrences(of: "/", with: "_")
         let url = dir.appendingPathComponent(safe + ".jpg")
         try? data.write(to: url)
     }
 
+    static var sessionThumbnailsDirectory: URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("SessionThumbnails", isDirectory: true)
+    }
+
+    /// Legacy path kept for backward compatibility
     static var deletedThumbnailsDirectory: URL {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("DeletedThumbnails", isDirectory: true)

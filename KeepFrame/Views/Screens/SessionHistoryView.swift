@@ -149,16 +149,23 @@ private struct SessionCard: View {
                 }
             }
 
-            HStack(spacing: 16) {
+            HStack(spacing: 12) {
                 statItem(icon: "trash.fill", value: session.deletedCount)
                 if !session.isFavoritesSession {
                     statItem(icon: "star.fill", value: session.favoritedCount)
                 }
                 statItem(icon: "checkmark", value: session.keptCount)
-                Spacer()
-                Text("\(session.totalReviewed.compactFormatted) \(String(localized: "reviewed_count"))")
-                    .font(.caption2)
-                    .foregroundStyle(.white.opacity(0.5))
+                Spacer(minLength: 4)
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text(session.totalReviewed.compactFormatted)
+                        .font(.caption2.bold())
+                        .monospacedDigit()
+                        .foregroundStyle(.white.opacity(0.5))
+                    Text(String(localized: "reviewed_count"))
+                        .font(.caption2)
+                        .foregroundStyle(.white.opacity(0.4))
+                }
+                .fixedSize()
                 Image(systemName: "chevron.right")
                     .font(.caption2)
                     .foregroundStyle(.white.opacity(0.3))
@@ -203,7 +210,7 @@ private struct SessionCard: View {
                 .font(.subheadline.bold())
                 .foregroundStyle(.white)
                 .lineLimit(1)
-                .minimumScaleFactor(0.7)
         }
+        .fixedSize()
     }
 }

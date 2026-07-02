@@ -1,6 +1,16 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@ (%@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ (%2$@)"
+          }
+        }
+      }
+    },
     "%@ (%lld)" : {
       "localizations" : {
         "en" : {
@@ -18,6 +28,7 @@
       }
     },
     "%@ %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -236,6 +247,7 @@
       }
     },
     "deleted_count %lld" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -247,6 +259,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Usunięte (%lld)"
+          }
+        }
+      }
+    },
+    "deleted_count_label" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deleted"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usunięte"
           }
         }
       }
@@ -555,28 +583,36 @@
         }
       }
     },
-    "no_session_history" : {
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "No history yet" } },
-        "pl" : { "stringUnit" : { "state" : "translated", "value" : "Brak historii" } }
-      }
-    },
-    "no_session_history_description" : {
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your completed sessions will appear here" } },
-        "pl" : { "stringUnit" : { "state" : "translated", "value" : "Twoje zakończone sesje pojawią się tutaj" } }
-      }
-    },
     "no_photos_found" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "No photos found" } },
-        "pl" : { "stringUnit" : { "state" : "translated", "value" : "Nie znaleziono zdjęć" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No photos found"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie znaleziono zdjęć"
+          }
+        }
       }
     },
     "no_photos_found_description" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "There are no photos matching your selection" } },
-        "pl" : { "stringUnit" : { "state" : "translated", "value" : "Brak zdjęć pasujących do wybranego zakresu" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "There are no photos matching your selection"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak zdjęć pasujących do wybranego zakresu"
+          }
+        }
       }
     },
     "no_photos_reviewed_in_session" : {
@@ -591,6 +627,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "W tej sesji nie przejrzano żadnych zdjęć"
+          }
+        }
+      }
+    },
+    "no_session_history" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No history yet"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak historii"
+          }
+        }
+      }
+    },
+    "no_session_history_description" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your completed sessions will appear here"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Twoje zakończone sesje pojawią się tutaj"
           }
         }
       }
@@ -1156,6 +1224,7 @@
       }
     },
     "trash_bin_title %lld" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

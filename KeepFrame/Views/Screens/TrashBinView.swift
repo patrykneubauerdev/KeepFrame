@@ -72,7 +72,7 @@ struct TrashBinView: View {
                 }
             }
             .background(Color("turq").opacity(0.15).ignoresSafeArea())
-            .navigationTitle(String(localized: "trash_bin_title \(viewModel.trashCount)"))
+            .navigationTitle("\(String(localized: "trash_bin")) (\(viewModel.trashCount.compactFormatted))")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
