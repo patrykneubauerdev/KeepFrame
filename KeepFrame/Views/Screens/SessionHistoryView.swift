@@ -29,7 +29,7 @@ struct SessionHistoryView: View {
             VStack(spacing: 20) {
                 if activeSessions.isEmpty && completedSessions.isEmpty {
                     VStack(spacing: 28) {
-                        Image(systemName: "rectangle.stack")
+                        Image(systemName: "clock.arrow.trianglehead.2.counterclockwise.rotate.90")
                             .font(.system(size: 44, weight: .thin))
                             .foregroundStyle(Color("turqLight"))
                             .padding(24)

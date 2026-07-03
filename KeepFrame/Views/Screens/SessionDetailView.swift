@@ -24,7 +24,7 @@ struct SessionDetailView: View {
                 VStack(spacing: 24) {
                     if session.totalReviewed == 0 {
                         VStack(spacing: 28) {
-                            Image(systemName: "photo.on.rectangle")
+                            Image(systemName: "hand.raised.slash.fill")
                                 .font(.system(size: 44, weight: .thin))
                                 .foregroundStyle(Color("turqLight"))
                                 .padding(24)

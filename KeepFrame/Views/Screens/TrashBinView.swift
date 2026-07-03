@@ -25,7 +25,7 @@ struct TrashBinView: View {
                     VStack(spacing: 28) {
                         Spacer()
 
-                        Image(systemName: "xmark.bin")
+                        Image(systemName: "trash.slash.fill")
                             .font(.system(size: 44, weight: .thin))
                             .foregroundStyle(Color("turqLight"))
                             .padding(24)
