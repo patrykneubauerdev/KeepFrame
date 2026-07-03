@@ -22,16 +22,34 @@ struct TrashBinView: View {
         NavigationStack {
             ZStack(alignment: .bottom) {
                 if viewModel.trashBin.isEmpty {
-                    VStack(spacing: 12) {
-                        Image(systemName: "trash")
-                            .font(.system(size: 48))
-                            .foregroundStyle(.white.opacity(0.3))
-                        Text("trash_empty")
-                            .font(.headline)
-                            .foregroundStyle(.white.opacity(0.6))
-                        Text("swiped_left_go_here")
-                            .font(.caption)
-                            .foregroundStyle(.white.opacity(0.4))
+                    VStack(spacing: 28) {
+                        Spacer()
+
+                        Image(systemName: "xmark.bin")
+                            .font(.system(size: 44, weight: .thin))
+                            .foregroundStyle(Color("turqLight"))
+                            .padding(24)
+                            .background(Color("turq").opacity(0.12), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                    .strokeBorder(Color("turqLight").opacity(0.25), lineWidth: 1)
+                            )
+                            .glassEffect(.regular, in: .rect(cornerRadius: 20))
+
+                        VStack(spacing: 8) {
+                            Text("trash_empty")
+                                .font(.title3.bold())
+                                .foregroundStyle(.white)
+
+                            Text("swiped_left_go_here")
+                                .font(.subheadline)
+                                .foregroundStyle(.white.opacity(0.5))
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal, 40)
+                        }
+
+                        Spacer()
+                        Spacer()
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {

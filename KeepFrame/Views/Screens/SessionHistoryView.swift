@@ -28,20 +28,32 @@ struct SessionHistoryView: View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 20) {
                 if activeSessions.isEmpty && completedSessions.isEmpty {
-                    VStack(spacing: 12) {
-                        Image(systemName: "clock")
-                            .font(.system(size: 48))
-                            .foregroundStyle(.white.opacity(0.3))
-                        Text("no_session_history")
-                            .font(.headline)
-                            .foregroundStyle(.white.opacity(0.6))
-                        Text("no_session_history_description")
-                            .font(.caption)
-                            .foregroundStyle(.white.opacity(0.4))
-                            .multilineTextAlignment(.center)
+                    VStack(spacing: 28) {
+                        Image(systemName: "rectangle.stack")
+                            .font(.system(size: 44, weight: .thin))
+                            .foregroundStyle(Color("turqLight"))
+                            .padding(24)
+                            .background(Color("turq").opacity(0.12), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                    .strokeBorder(Color("turqLight").opacity(0.25), lineWidth: 1)
+                            )
+                            .glassEffect(.regular, in: .rect(cornerRadius: 20))
+
+                        VStack(spacing: 8) {
+                            Text("no_session_history")
+                                .font(.title3.bold())
+                                .foregroundStyle(.white)
+
+                            Text("no_session_history_description")
+                                .font(.subheadline)
+                                .foregroundStyle(.white.opacity(0.5))
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal, 40)
+                        }
                     }
                     .frame(maxWidth: .infinity)
-                    .padding(.top, 100)
+                    .containerRelativeFrame(.vertical) { height, _ in height * 0.7 }
                 } else {
                     if !activeSessions.isEmpty {
                         sessionSection(title: String(localized: "active_session"), sessions: activeSessions, startIndex: 0)
@@ -156,7 +168,7 @@ private struct SessionCard: View {
                 }
                 statItem(icon: "checkmark", value: session.keptCount)
                 Spacer(minLength: 4)
-                VStack(alignment: .trailing, spacing: 2) {
+                VStack(spacing: 2) {
                     Text(session.totalReviewed.compactFormatted)
                         .font(.caption2.bold())
                         .monospacedDigit()
