@@ -212,7 +212,14 @@ final class PhotoDeckViewModel {
         isLoading = true
         defer { isLoading = false }
 
-        let status = await service.requestAuthorization()
+        let currentStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+        let status: PHAuthorizationStatus
+        if currentStatus == .notDetermined {
+            status = await service.requestAuthorization()
+        } else {
+            status = currentStatus
+        }
+
         guard status == .authorized || status == .limited else {
             authorizationDenied = true
             return
@@ -292,7 +299,14 @@ final class PhotoDeckViewModel {
         isLoading = true
         defer { isLoading = false }
 
-        let status = await service.requestAuthorization()
+        let currentStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+        let status: PHAuthorizationStatus
+        if currentStatus == .notDetermined {
+            status = await service.requestAuthorization()
+        } else {
+            status = currentStatus
+        }
+
         guard status == .authorized || status == .limited else {
             authorizationDenied = true
             return
@@ -318,6 +332,16 @@ final class PhotoDeckViewModel {
             isSessionChecked = true
             return
         }
+
+        // Check photo authorization early — if not determined yet, don't block here.
+        // Let WelcomeView handle the prompt.
+        let currentStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+        if currentStatus == .denied || currentStatus == .restricted {
+            authorizationDenied = true
+            isSessionChecked = true
+            return
+        }
+
         let descriptor = FetchDescriptor<SessionRecord>(
             predicate: #Predicate { $0.isActive },
             sortBy: [SortDescriptor(\.startDate, order: .reverse)]
@@ -326,6 +350,17 @@ final class PhotoDeckViewModel {
             isSessionChecked = true
             return
         }
+
+        // If not yet determined, request now before resuming session
+        if currentStatus == .notDetermined {
+            let status = await service.requestAuthorization()
+            if status != .authorized && status != .limited {
+                authorizationDenied = true
+                isSessionChecked = true
+                return
+            }
+        }
+
         // Deactivate duplicates, keep only the newest
         for s in activeSessions.dropFirst() {
             s.isActive = false

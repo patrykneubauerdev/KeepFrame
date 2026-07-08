@@ -15,6 +15,8 @@
 		<string>photos-redirect</string>
 		<string>photos-navigation</string>
 	</array>
+	<key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
+	<true/>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>

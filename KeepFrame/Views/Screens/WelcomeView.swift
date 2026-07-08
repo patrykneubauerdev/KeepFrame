@@ -10,8 +10,12 @@ import Photos
 
 struct WelcomeView: View {
     @Bindable var viewModel: PhotoDeckViewModel
+    @Environment(\.scenePhase) private var scenePhase
     @State private var years: [Int] = []
     @State private var isLoadingYears = true
+    @State private var accessDenied = false
+    @State private var showLimitedAccessAlert = false
+    @AppStorage("hasSeenLimitedAccessAlert") private var hasSeenLimitedAccessAlert = false
     @State private var sourceMode: SourceMode = .all
     @State private var selectedYear: Int = 2025
     @State private var showInfo = false
@@ -54,6 +58,52 @@ struct WelcomeView: View {
                     Spacer()
                     SpinnerView()
                         .offset(y: -34)
+                    Spacer()
+                } else if accessDenied {
+                    Spacer()
+                    VStack(spacing: 20) {
+                        Image(systemName: "photo.badge.exclamationmark")
+                            .font(.system(size: 44, weight: .thin))
+                            .foregroundStyle(Color("turqLight"))
+                            .padding(24)
+                            .background(Color("turq").opacity(0.12), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                    .strokeBorder(Color("turqLight").opacity(0.25), lineWidth: 1)
+                            )
+                            .glassEffect(.regular, in: .rect(cornerRadius: 20))
+
+                        VStack(spacing: 8) {
+                            Text("no_photo_access")
+                                .font(.title3.bold())
+                                .foregroundStyle(.white)
+
+                            Text("photo_access_short_description")
+                                .font(.subheadline)
+                                .foregroundStyle(.white.opacity(0.5))
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal, 30)
+                        }
+
+                        Button {
+                            if let url = URL(string: UIApplication.openSettingsURLString) {
+                                UIApplication.shared.open(url)
+                            }
+                        } label: {
+                            HStack(spacing: 8) {
+                                Image(systemName: "gear")
+                                Text("open_settings")
+                                    .fontWeight(.bold)
+                            }
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.white)
+                            .frame(width: 220)
+                            .padding(.vertical, 14)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(Color("turqLight"))
+                        .glassEffect(.regular.interactive())
+                    }
                     Spacer()
                 } else {
                     Spacer().frame(height: 4)
@@ -164,6 +214,16 @@ struct WelcomeView: View {
         }
         .navigationBarHidden(true)
         .animation(.easeInOut(duration: 0.25), value: sourceMode)
+        .alert(String(localized: "limited_access_title"), isPresented: $showLimitedAccessAlert) {
+            Button(String(localized: "select_more_photos")) {
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url)
+                }
+            }
+            Button(String(localized: "continue_with_selected"), role: .cancel) {}
+        } message: {
+            Text("limited_access_message")
+        }
         .sheet(isPresented: $showInfo) {
             infoSheet
                 .presentationDetents([.medium])
@@ -174,12 +234,37 @@ struct WelcomeView: View {
         }
         .task {
             let status = await service.requestAuthorization()
-            guard status == .authorized || status == .limited else { return }
+            guard status == .authorized || status == .limited else {
+                accessDenied = true
+                isLoadingYears = false
+                return
+            }
+            // Force photo library access early
+            _ = service.fetchPhotos()
             years = service.availableYears()
             if let first = years.first { selectedYear = first }
             isLoadingYears = false
             try? await Task.sleep(for: .milliseconds(50))
             appeared = true
+            // Show limited access prompt on WelcomeView only once
+            if status == .limited && !hasSeenLimitedAccessAlert {
+                try? await Task.sleep(for: .milliseconds(300))
+                hasSeenLimitedAccessAlert = true
+                showLimitedAccessAlert = true
+            }
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            guard newPhase == .active, accessDenied else { return }
+            Task {
+                let status = await service.requestAuthorization()
+                if status == .authorized || status == .limited {
+                    accessDenied = false
+                    years = service.availableYears()
+                    if let first = years.first { selectedYear = first }
+                    try? await Task.sleep(for: .milliseconds(50))
+                    appeared = true
+                }
+            }
         }
     }
 

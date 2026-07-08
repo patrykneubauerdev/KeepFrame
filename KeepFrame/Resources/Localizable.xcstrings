@@ -8,6 +8,12 @@
             "state" : "new",
             "value" : "%1$@ (%2$@)"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ (%2$@)"
+          }
         }
       }
     },
@@ -23,23 +29,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ (%2$lld)"
-          }
-        }
-      }
-    },
-    "%@ %@" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ %2$@"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ %2$@"
           }
         }
       }
@@ -214,6 +203,22 @@
         }
       }
     },
+    "continue_with_selected" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue with selected"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontynuuj z wybranymi"
+          }
+        }
+      }
+    },
     "delete_all" : {
       "localizations" : {
         "en" : {
@@ -242,23 +247,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Usunąć %lld zdjęć?"
-          }
-        }
-      }
-    },
-    "deleted_count %lld" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deleted (%lld)"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Usunięte (%lld)"
           }
         }
       }
@@ -323,22 +311,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zdecyduj w jakiej kolejności będą pokazywane zdjęcia: od najnowszych, najstarszych, lub w losowej kolejności."
-          }
-        }
-      }
-    },
-    "enable_access_in_settings" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enable access in Settings → Privacy → Photos"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Włącz dostęp w Ustawieniach → Prywatność → Zdjęcia"
           }
         }
       }
@@ -535,6 +507,38 @@
         }
       }
     },
+    "limited_access_message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You've selected only some photos. KeepFrame works best with full access — it helps you review and organize your entire library. You can change this in Settings."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zaznaczyłeś tylko wybrane zdjęcia. KeepFrame działa najlepiej z pełnym dostępem, pozwala przeglądać i porządkować całą bibliotekę. Możesz to zmienić w Ustawieniach."
+          }
+        }
+      }
+    },
+    "limited_access_title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limited Photo Access"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ograniczony dostęp do zdjęć"
+          }
+        }
+      }
+    },
     "newest" : {
       "localizations" : {
         "en" : {
@@ -675,6 +679,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Najstarsze"
+          }
+        }
+      }
+    },
+    "open_settings" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Settings"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwórz Ustawienia"
+          }
+        }
+      }
+    },
+    "photo_access_short_description" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KeepFrame needs access to your photo library to display your photos for review. Swipe to keep, favorite, or mark for deletion, your photos stay on your device and are never uploaded anywhere."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KeepFrame potrzebuje dostępu do Twojej biblioteki zdjęć, aby wyświetlać je do przeglądu. Przeciągaj, aby zachować, dodać do ulubionych lub oznaczyć do usunięcia, Twoje zdjęcia pozostają na urządzeniu i nigdy nie są nigdzie wysyłane."
           }
         }
       }
@@ -883,6 +919,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zaznacz wszystko"
+          }
+        }
+      }
+    },
+    "select_more_photos" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Settings"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwórz Ustawienia"
           }
         }
       }
@@ -1219,23 +1271,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Koszyk"
-          }
-        }
-      }
-    },
-    "trash_bin_title %lld" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Trash (%lld)"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Koszyk (%lld)"
           }
         }
       }

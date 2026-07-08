@@ -340,17 +340,48 @@ struct KeepFrameView: View {
     }
 
     private var deniedView: some View {
-        VStack(spacing: 12) {
-            Image(systemName: "photo.badge.exclamationmark")
-                .font(.system(size: 48))
-                .foregroundStyle(.red)
-            Text("no_photo_access")
-                .font(.headline)
+        VStack(spacing: 20) {
+            Image(systemName: "photo.on.rectangle.angled")
+                .font(.system(size: 44, weight: .thin))
+                .foregroundStyle(Color("turqLight"))
+                .padding(24)
+                .background(Color("turq").opacity(0.12), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .strokeBorder(Color("turqLight").opacity(0.25), lineWidth: 1)
+                )
+                .glassEffect(.regular, in: .rect(cornerRadius: 20))
+
+            VStack(spacing: 8) {
+                Text("no_photo_access")
+                    .font(.title3.bold())
+                    .foregroundStyle(.white)
+
+                Text("photo_access_short_description")
+                    .font(.subheadline)
+                    .foregroundStyle(.white.opacity(0.5))
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 30)
+            }
+
+            Button {
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url)
+                }
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "gear")
+                    Text("open_settings")
+                        .fontWeight(.bold)
+                }
+                .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.white)
-            Text("enable_access_in_settings")
-                .font(.caption)
-                .foregroundStyle(.white.opacity(0.5))
-                .multilineTextAlignment(.center)
+                .frame(width: 220)
+                .padding(.vertical, 14)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(Color("turqLight"))
+            .glassEffect(.regular.interactive())
         }
         .padding()
     }
