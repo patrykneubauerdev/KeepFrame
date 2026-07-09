@@ -13,6 +13,7 @@ struct KeepFrameApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
+                .preferredColorScheme(.dark)
         }
         .modelContainer(for: SessionRecord.self)
     }
