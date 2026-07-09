@@ -77,4 +77,21 @@ final class PhotoLibraryService {
             PHAssetChangeRequest.deleteAssets(assets as NSFastEnumeration)
         }
     }
+
+    func favoriteAsset(_ asset: PHAsset) async throws {
+        try await PHPhotoLibrary.shared().performChanges {
+            let request = PHAssetChangeRequest(for: asset)
+            request.isFavorite = true
+        }
+    }
+
+    func fetchSystemFavorites() -> [PHAsset] {
+        let options = PHFetchOptions()
+        options.predicate = NSPredicate(format: "favorite == YES AND mediaType == %d", PHAssetMediaType.image.rawValue)
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        let result = PHAsset.fetchAssets(with: options)
+        var assets: [PHAsset] = []
+        result.enumerateObjects { asset, _, _ in assets.append(asset) }
+        return assets
+    }
 }

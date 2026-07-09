@@ -2,10 +2,21 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>KeepFrame potrzebuje dostępu do zdjęć, aby pomóc Ci je przeglądać i porządkować.</string>
 	<key>CFBundleIconFile</key>
 	<string>icon-KeepFrame</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>Polish</string>
+	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>photos</string>
+		<string>photos-redirect</string>
+		<string>photos-navigation</string>
+	</array>
+	<key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
+	<true/>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>
