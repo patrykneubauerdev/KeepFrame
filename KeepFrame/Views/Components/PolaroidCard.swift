@@ -13,7 +13,7 @@ struct PolaroidCard: View {
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
-                Color.white
+                Color(.turqUltraDark)
                 if let image {
                     Image(uiImage: image)
                         .resizable()

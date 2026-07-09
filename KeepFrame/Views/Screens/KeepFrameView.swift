@@ -359,7 +359,7 @@ struct KeepFrameView: View {
 
                 Text("photo_access_short_description")
                     .font(.subheadline)
-                    .foregroundStyle(.white.opacity(0.5))
+                    .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 30)
             }
@@ -369,15 +369,11 @@ struct KeepFrameView: View {
                     UIApplication.shared.open(url)
                 }
             } label: {
-                HStack(spacing: 8) {
-                    Image(systemName: "gear")
-                    Text("open_settings")
-                        .fontWeight(.bold)
-                }
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.white)
-                .frame(width: 220)
-                .padding(.vertical, 14)
+                Text("\(Text(String(localized: "open_settings_prefix")).fontWeight(.regular))\(Text(String(localized: "open_settings_bold")).fontWeight(.bold)) \(Image(systemName: "gear"))")
+                    .font(.subheadline)
+                    .foregroundStyle(.white)
+                    .frame(width: 220)
+                    .padding(.vertical, 14)
             }
             .buttonStyle(.borderedProminent)
             .tint(Color("turqLight"))

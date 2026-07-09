@@ -61,7 +61,7 @@ struct WelcomeView: View {
                     Spacer()
                 } else if accessDenied {
                     Spacer()
-                    VStack(spacing: 20) {
+                    VStack(spacing: 32) {
                         Image(systemName: "photo.badge.exclamationmark")
                             .font(.system(size: 44, weight: .thin))
                             .foregroundStyle(Color("turqLight"))
@@ -73,14 +73,14 @@ struct WelcomeView: View {
                             )
                             .glassEffect(.regular, in: .rect(cornerRadius: 20))
 
-                        VStack(spacing: 8) {
+                        VStack(spacing: 12) {
                             Text("no_photo_access")
                                 .font(.title3.bold())
                                 .foregroundStyle(.white)
 
                             Text("photo_access_short_description")
                                 .font(.subheadline)
-                                .foregroundStyle(.white.opacity(0.5))
+                                .foregroundStyle(.white)
                                 .multilineTextAlignment(.center)
                                 .padding(.horizontal, 30)
                         }
@@ -90,20 +90,17 @@ struct WelcomeView: View {
                                 UIApplication.shared.open(url)
                             }
                         } label: {
-                            HStack(spacing: 8) {
-                                Image(systemName: "gear")
-                                Text("open_settings")
-                                    .fontWeight(.bold)
-                            }
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(.white)
-                            .frame(width: 220)
-                            .padding(.vertical, 14)
+                            Text("\(Text(String(localized: "open_settings_prefix")).fontWeight(.regular))\(Text(String(localized: "open_settings_bold")).fontWeight(.bold)) \(Image(systemName: "gear"))")
+                                .font(.subheadline)
+                                .foregroundStyle(.white)
+                                .frame(width: 220)
+                                .padding(.vertical, 14)
                         }
                         .buttonStyle(.borderedProminent)
                         .tint(Color("turqLight"))
                         .glassEffect(.regular.interactive())
                     }
+                    Spacer()
                     Spacer()
                 } else {
                     Spacer().frame(height: 4)

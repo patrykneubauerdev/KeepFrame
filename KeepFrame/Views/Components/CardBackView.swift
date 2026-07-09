@@ -19,29 +19,35 @@ struct CardBackView: View {
                 endPoint: .bottomTrailing
             )
 
-            // Turq center with vignette
+            // Dark turq center — matched to front card proportions
             ZStack {
-                Color("turq")
-                RadialGradient(
-                    colors: [.clear, Color("turqDark").opacity(0.7)],
-                    center: .center,
-                    startRadius: 30,
-                    endRadius: 160
-                )
-            }
-            .frame(width: 300, height: 340)
+                // Deep dark background
+                Color("turqDark")
 
-            // Logo
-            Image("iconKF")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 150, height: 150)
+                // Subtle radial depth
+                RadialGradient(
+                    colors: [Color("turq").opacity(0.3), Color("turqDark"), .black.opacity(0.4)],
+                    center: .center,
+                    startRadius: 20,
+                    endRadius: 180
+                )
+
+                // Logo with shadow and glow
+                Image("iconKF")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 140, height: 140)
+                    .shadow(color: .black.opacity(0.5), radius: 8, x: 0, y: 4)
+                    .shadow(color: Color("turq").opacity(0.3), radius: 16, x: 0, y: 0)
+            }
+            .frame(width: 300, height: 300)
+            .offset(y: -20)
 
             // Diagonal shimmer
             Rectangle()
                 .fill(
                     LinearGradient(
-                        colors: [.clear, .white.opacity(0.35), .white.opacity(0.5), .white.opacity(0.35), .clear],
+                        colors: [.clear, .white.opacity(0.2), .white.opacity(0.35), .white.opacity(0.2), .clear],
                         startPoint: .leading,
                         endPoint: .trailing
                     )
