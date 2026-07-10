@@ -4,4 +4,4 @@ iOS app for decluttering your photo library - swipe to keep or delete, with fun 
 
 In development
 
-BETA NOW!
+v1.0.0
