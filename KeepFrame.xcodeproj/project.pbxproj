@@ -15,6 +15,7 @@
 		8459DE192FBE12BA008FF482 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459DE182FBE12BA008FF482 /* WelcomeView.swift */; };
 		8459DE1B2FC1A00A008FF482 /* SessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459DE1A2FC1A00A008FF482 /* SessionDetailView.swift */; };
 		84919A002FE334980038145C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 849199FF2FE334980038145C /* Localizable.xcstrings */; };
+		84919A022FE334990038145C /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 84919A012FE334990038145C /* InfoPlist.xcstrings */; };
 		84A1B0012F054A0100000001 /* Int+CompactFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A1B0012F054A0100000005 /* Int+CompactFormat.swift */; };
 		84A1B0012F054A0100000002 /* SwipeTutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A1B0012F054A0100000006 /* SwipeTutorialView.swift */; };
 		84A1B0012F054A0100000003 /* SessionCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A1B0012F054A0100000007 /* SessionCompleteView.swift */; };
@@ -38,6 +39,7 @@
 		8459DE182FBE12BA008FF482 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		8459DE1A2FC1A00A008FF482 /* SessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDetailView.swift; sourceTree = "<group>"; };
 		849199FF2FE334980038145C /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		84919A012FE334990038145C /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		84A1B0012F054A0100000005 /* Int+CompactFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+CompactFormat.swift"; sourceTree = "<group>"; };
 		84A1B0012F054A0100000006 /* SwipeTutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTutorialView.swift; sourceTree = "<group>"; };
 		84A1B0012F054A0100000007 /* SessionCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCompleteView.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 				84AB4F292FBA3CB400654C65 /* Assets.xcassets */,
 				8459DDF22FBBC63C008FF482 /* icon-KeepFrame.icon */,
 				849199FF2FE334980038145C /* Localizable.xcstrings */,
+				84919A012FE334990038145C /* InfoPlist.xcstrings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -229,6 +232,7 @@
 				8459DDF32FBBC63C008FF482 /* icon-KeepFrame.icon in Resources */,
 				84AB4F2C2FBA3CB400654C65 /* Assets.xcassets in Resources */,
 				84919A002FE334980038145C /* Localizable.xcstrings in Resources */,
+				84919A022FE334990038145C /* InfoPlist.xcstrings in Resources */,
 			);
 		};
 /* End PBXResourcesBuildPhase section */
@@ -398,7 +402,6 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = KeepFrame/Info.plist;
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "KeepFrame potrzebuje dostępu do zdjęć, aby pomóc Ci je przeglądać i porządkować.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -433,7 +436,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = KeepFrame/Info.plist;
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "KeepFrame potrzebuje dostępu do zdjęć, aby pomóc Ci je przeglądać i porządkować.";
+
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
