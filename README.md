@@ -34,39 +34,27 @@ Deleted photos are moved to the system **Recently Deleted** album, so they stay 
 
 ## Screenshots
 
-### 📸 Welcome & session setup
+### 🃏 Deck, swipes & session setup
 
 <p align="center">
-<img src="keepframe-repo-assets/iphone-screen-keepframe-01.png" width="250" title="Welcome screen">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="keepframe-repo-assets/iphone-screen-keepframe-02.png" width="250" title="Photo scope selection">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="keepframe-repo-assets/iphone-screen-keepframe-03.png" width="250" title="Swipe tutorial">
+<img src="keepframe-repo-assets/iphone-screen-keepframe-04.gif" width="250" title="Deck appearance and swipe animation">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="keepframe-repo-assets/iphone-screen-keepframe-02.png" width="250" title="Photo scope selection">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="keepframe-repo-assets/iphone-screen-keepframe-03.png" width="250" title="Swipe info prompt">
 </p>
 
-| Welcome screen | Photo scope & sort order | Swipe tutorial |
+| Deck & swipe animation | Photo scope & year filter | Swipe info prompt |
 |:-:|:-:|:-:|
-| Logo with turquoise gradient and glass UI elements | Choose all photos, favorites, or a specific year - pick sort order | Learn the three swipe gestures before you start |
+| The card deck appears and animates through a left, right, and up swipe | Choose which photos populate the deck - all photos, favorites, or a specific year | Tap the (i) icon to see a quick rundown of what each swipe does and how the app works |
 
 ---
 
-### 🃏 Swiping through the deck
+### 🗑️ Trash & session history
 
 <p align="center">
-<img src="keepframe-repo-assets/iphone-screen-keepframe-04.gif" width="250" title="Card flip and swipe animation">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="keepframe-repo-assets/iphone-screen-keepframe-05.png" width="250" title="Polaroid card deck">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="keepframe-repo-assets/iphone-screen-keepframe-06.png" width="250" title="Trash bin">
+<img src="keepframe-repo-assets/iphone-screen-keepframe-06.png" width="250" title="Trash bin">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="keepframe-repo-assets/iphone-screen-keepframe-07.png" width="250" title="Session history">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="keepframe-repo-assets/iphone-screen-keepframe-08.png" width="250" title="Session detail">
 </p>
 
-| Card flip animation | Swiping in action | Trash bin with restore |
+| Trash bin with restore | Session history | Session detail |
 |:-:|:-:|:-:|
-| First card slides in and flips with a diagonal shimmer reveal | Polaroid deck with stacked depth effect and live stats | Review trashed photos - select and restore, or delete all |
-
----
-
-### 📋 Session history & details
-
-<p align="center">
-<img src="keepframe-repo-assets/iphone-screen-keepframe-07.png" width="250" title="Session history">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="keepframe-repo-assets/iphone-screen-keepframe-08.png" width="250" title="Session detail">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="keepframe-repo-assets/iphone-screen-keepframe-09.png" width="250" title="Session complete">
-</p>
-
-| Session history | Session detail | Session complete |
-|:-:|:-:|:-:|
-| All past sessions with stats - tap for full details | Per-photo breakdown: deleted, favorited, kept - with thumbnails | Celebration screen with the option to review trash before ending |
+| Inside the trash bin - review photos marked for deletion and restore any of them back into the deck | Browse every past review session with its stats | Per-photo breakdown of a session, plus a reminder that deleted photos stay recoverable from the system gallery for 30 days |
 
 ---
 
@@ -86,6 +74,7 @@ Deleted photos are moved to the system **Recently Deleted** album, so they stay 
 
 ## Key features
 
+- **Welcome screen** - turquoise gradient logo and glass UI elements on first launch
 - **Polaroid card deck** - photos rendered as realistic Polaroid frames with depth-stacked cards behind
 - **Card flip animation** - the first card slides in from below and flips with a diagonal shimmer reveal
 - **Swipe gestures + buttons** - drag to dismiss or tap the action buttons below the deck
@@ -95,6 +84,7 @@ Deleted photos are moved to the system **Recently Deleted** album, so they stay 
 - **Year filtering** - declutter photos from one specific year at a time
 - **Sort order** - newest first, oldest first, or shuffled randomly
 - **Session history** - browse every past session with a per-photo thumbnail grid
+- **Session complete screen** - celebratory summary at the end of a session, with the option to review the trash before finalizing deletions
 - **Compact number formatting** - large counts displayed as `1.2k`, `2.5M`
 - **Glass effect UI** - iOS 26 `.glassEffect` modifier used throughout the interface
 - **Dark mode only** - enforced via `.preferredColorScheme(.dark)` with a custom turquoise palette
