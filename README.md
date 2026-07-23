@@ -40,9 +40,9 @@ Deleted photos are moved to the system **Recently Deleted** album, so they stay 
 <img src="keepframe-repo-assets/iphone-screen-keepframe-04.gif" width="250" title="Deck appearance and swipe animation">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="keepframe-repo-assets/iphone-screen-keepframe-02.png" width="250" title="Photo scope selection">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="keepframe-repo-assets/iphone-screen-keepframe-03.png" width="250" title="Swipe info prompt">
 </p>
 
-| Deck & swipe animation | Photo scope & year filter | Swipe info prompt |
+| Swipe deck | Session configuration | Gesture reference |
 |:-:|:-:|:-:|
-| The card deck appears and animates through a left, right, and up swipe | Choose which photos populate the deck - all photos, favorites, or a specific year | Tap the (i) icon to see a quick rundown of what each swipe does and how the app works |
+| Swipe-driven Polaroid card stack with physics-based animations and three directional actions: keep, delete, and favorite | Configure a review session by selecting the photo scope, optional year filter, and display order before loading the deck | Built-in gesture guide explaining every available swipe action and the complete review workflow before starting a session |
 
 ---
 
@@ -52,9 +52,9 @@ Deleted photos are moved to the system **Recently Deleted** album, so they stay 
 <img src="keepframe-repo-assets/iphone-screen-keepframe-06.png" width="250" title="Trash bin">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="keepframe-repo-assets/iphone-screen-keepframe-07.png" width="250" title="Session history">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="keepframe-repo-assets/iphone-screen-keepframe-08.png" width="250" title="Session detail">
 </p>
 
-| Trash bin with restore | Session history | Session detail |
+| Trash management | Session history | Session analytics |
 |:-:|:-:|:-:|
-| Inside the trash bin - review photos marked for deletion and restore any of them back into the deck | Browse every past review session with its stats | Per-photo breakdown of a session, plus a reminder that deleted photos stay recoverable from the system gallery for 30 days |
+| Review every photo marked for deletion, restore individual items back into the deck, or permanently remove the entire trash when finishing a session | Persistent session timeline stored with SwiftData, including progress, statistics, and review metadata for every completed session | Detailed per-session breakdown with thumbnail previews, per-photo actions, and a reminder that deleted assets remain recoverable for 30 days in the system gallery |
 
 ---
 
@@ -74,7 +74,6 @@ Deleted photos are moved to the system **Recently Deleted** album, so they stay 
 
 ## Key features
 
-- **Welcome screen** - turquoise gradient logo and glass UI elements on first launch
 - **Polaroid card deck** - photos rendered as realistic Polaroid frames with depth-stacked cards behind
 - **Card flip animation** - the first card slides in from below and flips with a diagonal shimmer reveal
 - **Swipe gestures + buttons** - drag to dismiss or tap the action buttons below the deck
