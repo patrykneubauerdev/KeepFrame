@@ -47,9 +47,9 @@ Deleted photos are moved to the system **Recently Deleted** album, so they stay 
 ---
 
 <p align="center">
-<img src="keepframe-repo-assets/keepframe-screen-04.png" width="250" title="Trash bin">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="keepframe-repo-assets/keepframe-screen-05.png" width="250" title="Session history">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="keepframe-repo-assets/keepframe-screen-06.png" width="250" title="Photo recovery instructions">
+<img src="keepframe-repo-assets/keepframe-screen-05.png" width="250" title="Trash bin">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="keepframe-repo-assets/keepframe-screen-02.png" width="250" title="Session history">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="keepframe-repo-assets/keepframe-screen-04.png" width="250" title="Photo recovery instructions">
 </p>
 
 | Trash bin | Session history | Photo recovery instructions |
