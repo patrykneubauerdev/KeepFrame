@@ -54,7 +54,7 @@ Deleted photos are moved to the system **Recently Deleted** album, so they stay 
 
 | Trash bin | Session history | Photo recovery instructions |
 |:-:|:-:|:-:|
-| Review photos marked for deletion before finalizing the session, with the ability to restore selected items back into the review deck | Browse completed cleanup sessions with saved progress, statistics, and detailed photo-level actions stored locally | Built-in guide explaining how to restore deleted photos from the iOS Photos app within the 30-day recovery period |
+| Review photos marked for deletion before finalizing the session, with the ability to restore selected items back into the review deck | Browse completed cleanup sessions with saved progress, statistics, and detailed photo-level actions stored locally | Step-by-step guide for restoring deleted photos from the iOS Photos app |
 
 ---
 
