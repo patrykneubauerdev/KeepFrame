@@ -34,31 +34,27 @@ Deleted photos are moved to the system **Recently Deleted** album, so they stay 
 
 ## Screenshots
 
-### 🚀 Getting started & review workflow
-
 <p align="center">
-<img src="keepframe-repo-assets/keepframe-screen-01.png" width="250" title="Welcome screen">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="keepframe-repo-assets/keepframe-screen-02.png" width="250" title="Session configuration">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="keepframe-repo-assets/keepframe-screen-03.png" width="250" title="Gesture guide">
+<img src="keepframe-repo-assets/keepframe-screen-01.png" width="250" title="Session setup">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="keepframe-repo-assets/keepframe-screen-06.gif" width="250" title="Card deck animation">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="keepframe-repo-assets/keepframe-screen-03.png" width="250" title="Swipe tutorial sheet">
 </p>
 
-| Welcome screen | Session configuration | Gesture reference |
+| Session setup | Card deck animation | Swipe tutorial |
 |:-:|:-:|:-:|
-| Initial entry screen introducing the app with the custom glass-effect interface and quick access to the review workflow | Configure a review session by selecting the photo scope, optional year filter, and display order before loading the deck | Built-in gesture guide explaining every available swipe action and the complete review workflow before starting a session |
+| Configure a cleanup session by selecting the photo scope, date range, favorites filter, and sorting method before starting the review process | Animated Polaroid card deck presentation with the first card reveal, 3D flip transition, and gesture-driven swipe animations for keep, delete, and favorite actions | Interactive bottom sheet explaining available swipe gestures and how each action affects the photo review workflow |
 
 ---
 
-### 🃏 Review sessions & history
-
 <p align="center">
-<img src="keepframe-repo-assets/keepframe-screen-04.png" width="250" title="Swipe deck">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="keepframe-repo-assets/keepframe-screen-05.png" width="250" title="Trash management">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="keepframe-repo-assets/keepframe-screen-06.png" width="250" title="Session history">
+<img src="keepframe-repo-assets/keepframe-screen-04.png" width="250" title="Trash bin">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="keepframe-repo-assets/keepframe-screen-05.png" width="250" title="Session history">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="keepframe-repo-assets/keepframe-screen-06.png" width="250" title="Photo recovery instructions">
 </p>
 
-| Swipe deck | Trash management | Session history |
+| Trash bin | Session history | Photo recovery instructions |
 |:-:|:-:|:-:|
-| Swipe-driven Polaroid card stack with physics-based animations and three directional actions: keep, delete, and favorite | Review photos marked for deletion, restore individual items, or permanently remove the trash when completing a session | Persistent session history stored with SwiftData, including per-session statistics, progress, and detailed review results |
+| Review photos marked for deletion before finalizing the session, with the ability to restore selected items back into the review deck | Browse completed cleanup sessions with saved progress, statistics, and detailed photo-level actions stored locally | Informational sheet shown from session details explaining how to recover deleted photos through the iOS Photos app and the 30-day recovery limit of the Recently Deleted album |
 
 ---
 
